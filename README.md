@@ -4,9 +4,9 @@
 
 ###### Como será:
 
-*Não se preocupe com senhas! Faça login no app através da sua conta do Google.
-*Cadastre todos os seus livros para manter o controle de suas leituras.
-*Receba recomendações na tela inicial de quais livros você ainda não concluiu e em que página parou.
+- Não se preocupe com senhas! Faça login no app através da sua conta do Google.
+- Cadastre todos os seus livros para manter o controle de suas leituras.
+- Receba recomendações na tela inicial de quais livros você ainda não concluiu e em que página parou.
 
 ###### Projeto escolar:
 
