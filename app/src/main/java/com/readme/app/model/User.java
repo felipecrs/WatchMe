@@ -18,6 +18,12 @@ public class User {
         this.password = password;
     }
 
+    public User(Integer _id, String name, String email) {
+        this._id = _id;
+        this.name = name;
+        this.email = email;
+    }
+
     public Integer get_id() {
         return _id;
     }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_login">Entrar</string>
+    <string name="prompt_email">E-mail</string>
+    <string name="prompt_password">Senha</string>
+    <string name="action_sign_in">Entrar ou cadastrar</string>
+    <string name="action_sign_in_short">Entrar</string>
+    <string name="error_invalid_email">Endereço de e-mail inválido</string>
+    <string name="error_invalid_password">Senha muito curta</string>
+    <string name="error_incorrect_password">Senha incorreta</string>
+    <string name="error_field_required">Campo necessário</string>
+    <string name="permission_rationale">Permissão de contatos é necessário para mostrar sugestões de e-mail.</string>
+    <string name="title_activity_main">Biblioteca</string>
+    <string name="book_edit_txtTitle">Título</string>
+    <string name="book_edit_txtAuthor">Autor</string>
+    <string name="book_edit_txtTotalPages">Total de páginas</string>
+    <string name="book_edit_actionSave">Salvar</string>
+    <string name="title_activity_book_edit">Editar livro</string>
+    <string name="action_settings">Configurações</string>
+    <string name="error_author_invalid">Nome do autor inválido</string>
+    <string name="error_title_invalid">Título inválido</string>
+    <string name="error_invalid_pages_quantity">Número total de páginas inválido</string>
+    <string name="user_edit_txtEmail">E-mail</string>
+    <string name="user_edit_txtName">Nome</string>
+    <string name="book_edit_actionDelete">Excluir</string>
+</resources>

@@ -8,4 +8,11 @@
     tools:context=".view.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+    <ListView
+        android:id="@+id/main_listViewBooks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+
+
 </android.support.constraint.ConstraintLayout>

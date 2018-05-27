@@ -1,24 +1,76 @@
 <resources>
-    <string name="app_name">ReadME</string>
-    <string name="title_activity_login">Login</string>
+    <string name="app_name" translatable="false">ReadME</string>
 
     <!-- Strings related to login -->
+    <string name="title_activity_login">Login</string>
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <!-- Strings related to Main -->
+    <string name="title_activity_main">Library</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_main_name">Name</string>
+    <string name="nav_header_main_email">email@domain.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Strings related to Book Edit -->
+    <string name="title_activity_book_edit">Edit book</string>
+    <string name="book_edit_actionSave">Save</string>
+    <string name="book_edit_actionDelete">Delete</string>
+    <string name="book_edit_txtTotalPages">Total pages</string>
+    <string name="book_edit_txtAuthor">Author</string>
+    <string name="book_edit_txtTitle">Title</string>
+
+    <!-- Strings related to Settings -->
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Profile settings -->
+    <string name="pref_header_profile">Profile</string>
+    <string name="pref_edit_profile">Edit profile</string>
+    <string name="pref_edit_profile_summary">Edit your profile</string>
+    <string name="pref_logout">Logout</string>
+    <string name="pref_edit_profile_button_key" translatable="false">pref_btnEditProfile</string>
+    <string name="pref_logout_button_key" translatable="false">pref_btnLogout</string>
+    <string name="user_edit_txtDefaultId">999</string>
+
+    <!-- Error strings -->
+    <string name="error_title_invalid">This title is invalid</string>
+    <string name="error_author_invalid">This author name is invalid</string>
+    <string name="error_invalid_pages_quantity">This total pages number is invalid</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+
+    <!-- Messages strings -->
+    <string name="message_user_registered">This account was created.</string>
+    <string name="message_book_added">This book was added to your library.</string>
+    <string name="message_error_database">Error ocurred in database</string>
+    <string name="user_edit_txtName">Name</string>
+    <string name="user_edit_txtEmail">Email</string>
+    <string name="user_edit_txtId">ID:</string>
+    <string name="title_activity_user_edit">Edit user</string>
+    <string name="error_invalid_name">This name is invalid.</string>
+    <string name="error_email_already_exist">This email is already used.</string>
+    <string name="message_user_updated">User details updated.</string>
+    <string name="book_edit_txtActualPage">Actual page</string>
+    <string name="error_wrong_password">This password is wrong</string>
+    <string name="title_activity_book_add">Add book</string>
+    <string name="book_id_extra_key" translatable="false">book_id</string>
+    <string name="pref_category_account">Account</string>
+    <string name="pref_list_users">List users</string>
+    <string name="pref_list_users_button_key" translatable="false">pref_btnListUsers</string>
+    <string name="pref_list_users_summary">List all users registered on system</string>
+    <string name="title_activity_users_list">Users list</string>
+    <string name="sample_email">email@domain.com</string>
+    <string name="sample_bookTitle">Sample Title Book</string>
+    <string name="sample_bookAuthor">Author Name</string>
+
 </resources>

@@ -1,0 +1,19 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_category_account">
+    <Preference
+        android:title="@string/pref_edit_profile"
+        android:key="@string/pref_edit_profile_button_key"
+        android:summary="@string/pref_edit_profile_summary"
+        android:icon="@drawable/ic_account_circle_black_24dp"/>
+    <Preference
+        android:title="@string/pref_list_users"
+        android:key="@string/pref_list_users_button_key"
+        android:summary="@string/pref_list_users_summary"
+        android:icon="@drawable/ic_list_black_24dp"/>
+    <Preference
+        android:title="@string/pref_logout"
+        android:key="@string/pref_logout_button_key"
+        android:icon="@drawable/ic_exit_to_app_black_24dp"/>
+    </PreferenceCategory>
+</PreferenceScreen>

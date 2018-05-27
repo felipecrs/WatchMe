@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE = "books";
+    private static final String DATABASE = "database";
     private static final int VERSION = 1;
 
     public DatabaseHelper(Context context) {
@@ -26,7 +26,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         +"user_id integer not null, "
                         +"title text not null, "
                         +"author text not null, "
-                        +"totalPages integer not null)");
+                        +"totalPages integer not null, "
+                        +"actualPage integer)");
     }
 
     @Override
@@ -48,11 +49,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static class Books{
         public static final String TABLE = "books";
         public static final String _ID = "_id";
-        public static final String USER_ID = "_id";
+        public static final String USER_ID = "user_id";
         public static final String TITLE = "title";
         public static final String AUTHOR = "author";
         public static final String TOTAL_PAGES = "totalPages";
+        public static final String ACTUAL_PAGE = "actualPage";
 
-        public static final String[] COLUMNS = { _ID, USER_ID, TITLE, AUTHOR, TOTAL_PAGES};
+        public static final String[] COLUMNS = { _ID, USER_ID, TITLE, AUTHOR, TOTAL_PAGES, ACTUAL_PAGE};
     }
 }
