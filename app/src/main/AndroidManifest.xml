@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.LoginActivity"
+            android:name=".control.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".view.MainActivity"
+            android:name=".control.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,37 +22,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.BookEditActivity"
+            android:name=".control.BookEditActivity"
             android:label="@string/title_activity_book_edit"
-            android:parentActivityName=".view.MainActivity">
+            android:parentActivityName=".control.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.MainActivity" />
+                android:value=".control.MainActivity" />
         </activity>
         <activity
-            android:name=".view.SettingsActivity"
+            android:name=".control.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.SettingsTheme"
-            android:parentActivityName=".view.MainActivity">
+            android:parentActivityName=".control.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.MainActivity" />
+                android:value=".control.MainActivity" />
         </activity>
         <activity
-            android:name=".view.UserEditActivity"
+            android:name=".control.UserEditActivity"
             android:label="@string/title_activity_user_edit"
-            android:parentActivityName=".view.SettingsActivity">
+            android:parentActivityName=".control.SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.SettingsActivity" />
+                android:value=".control.SettingsActivity" />
         </activity>
         <activity
-            android:name=".view.UsersListActivity"
+            android:name=".control.UsersListActivity"
             android:label="@string/title_activity_users_list"
-            android:parentActivityName=".view.SettingsActivity">
+            android:parentActivityName=".control.SettingsActivity">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value=".view.SettingsActivity" />
+            android:value=".control.SettingsActivity" />
         </activity>
     </application>
 

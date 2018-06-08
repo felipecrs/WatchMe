@@ -4,11 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MainActivity">
+    tools:context=".control.MainActivity">
 
-    <include layout="@layout/toolbar"
-        app:title="@string/title_activity_main">
-    </include>
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/toolbar" />
+    </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
 
@@ -20,5 +23,7 @@
         android:layout_margin="@dimen/fab_margin"
         app:fabSize="normal"
         app:srcCompat="@drawable/ic_library_add_black_24dp" />
+
+
 
 </android.support.design.widget.CoordinatorLayout>

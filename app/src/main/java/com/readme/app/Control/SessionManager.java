@@ -1,12 +1,9 @@
-package com.readme.app.Control;
+package com.readme.app.control;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-
-import com.readme.app.view.LoginActivity;
 
 public class SessionManager {
 
