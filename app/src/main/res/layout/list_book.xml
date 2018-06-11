@@ -1,18 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal">
+
+    <ImageView
+
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        app:srcCompat="@drawable/ic_book_black_24dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/list_book_txtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sample_bookTitle"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+        <TextView
+            android:id="@+id/list_book_txtAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sample_bookAuthor"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/list_book_txtTitle"
+        android:id="@+id/list_book_txtReadPages"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sample_bookTitle" />
+        android:layout_height="match_parent"
+        android:gravity="right|center"
+        android:text="@string/sample_bookReadPages"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"/>
 
-    <TextView
-        android:id="@+id/list_book_txtAuthor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sample_bookAuthor" />
 </LinearLayout>

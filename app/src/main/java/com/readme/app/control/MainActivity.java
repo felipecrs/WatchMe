@@ -1,9 +1,11 @@
 package com.readme.app.control;
 
 import com.readme.app.R;
+import com.readme.app.model.Book;
 import com.readme.app.model.adapter.BookAdapter;
 import com.readme.app.model.dao.BookDAO;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,8 +17,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.net.Inet4Address;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,8 +45,10 @@ public class MainActivity extends AppCompatActivity
         sessionManager.checkLogin();
 
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.title_activity_main);
 
         FloatingActionButton fab = findViewById(R.id.fab_add_book);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -67,14 +74,19 @@ public class MainActivity extends AppCompatActivity
         txtEmail = headerView.findViewById(R.id.nav_header_main_txtEmail);
         listViewBooks = findViewById(R.id.main_listViewBooks);
 
-        if (sessionManager.isLoggedIn()) {
-            bookDAO = new BookDAO(this);
-            bookAdapter = new BookAdapter(this, bookDAO.listByUser(sessionManager.getUserId()));
-
-            listViewBooks.setAdapter(bookAdapter);
-
-            updateUserDetails();
-        }
+        bookDAO = new BookDAO(this);
+        bookAdapter = new BookAdapter(this, bookDAO.listByUser(sessionManager.getUserId()));
+        listViewBooks.setAdapter(bookAdapter);
+        listViewBooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Book book = (Book) parent.getItemAtPosition(position);
+                Intent intent = new Intent(MainActivity.this, BookEditActivity.class);
+                intent.putExtra("book_id", book.get_id());
+                startActivityForResult(intent, UPDATE_BOOK_LIST_REQUEST);
+            }
+        });
+        updateUserDetails();
     }
 
     @Override
@@ -116,6 +128,7 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.nav_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
+                intent.putExtra("user_id", sessionManager.getUserId());
                 startActivityForResult(intent, UPDATE_USER_DETAILS_REQUEST);
                 break;
         }

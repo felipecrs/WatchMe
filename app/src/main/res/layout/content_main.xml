@@ -12,7 +12,7 @@
         android:id="@+id/main_listViewBooks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/activity_vertical_margin">
-    </ListView>
+        android:dividerHeight="8dp"
+        android:padding="@dimen/activity_vertical_margin"></ListView>
 
 </android.support.constraint.ConstraintLayout>

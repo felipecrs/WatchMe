@@ -51,14 +51,14 @@
 
     <!-- Messages strings -->
     <string name="message_user_registered">This account was created.</string>
-    <string name="message_book_added">This book was added to your library.</string>
+    <string name="message_book_added">This book was added to your library</string>
     <string name="message_error_database">Error ocurred in database</string>
     <string name="user_edit_txtName">Name</string>
     <string name="user_edit_txtEmail">Email</string>
     <string name="user_edit_txtId">ID:</string>
     <string name="title_activity_user_edit">Edit user</string>
     <string name="error_invalid_name">This name is invalid.</string>
-    <string name="error_email_already_exist">This email is already used.</string>
+    <string name="error_email_already_exist">This email is already used</string>
     <string name="message_user_updated">User details updated.</string>
     <string name="book_edit_txtActualPage">Actual page</string>
     <string name="error_wrong_password">This password is wrong</string>
@@ -72,5 +72,10 @@
     <string name="sample_email">email@domain.com</string>
     <string name="sample_bookTitle">Sample Title Book</string>
     <string name="sample_bookAuthor">Author Name</string>
+    <string name="title_activity_user_add">User register</string>
+    <string name="message_book_edited">Book details updated</string>
+    <string name="sample_bookReadPages">Read 1/100</string>
+    <string name="list_book_txtReadPages">Read</string>
+    <string name="list_book_not_started">Not started to read</string>
 
 </resources>

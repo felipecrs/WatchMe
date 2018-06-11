@@ -8,6 +8,10 @@ import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.readme.app.R;
 
@@ -78,20 +82,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupActionBar();
+        setContentView(R.layout.activity_settings);
 
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new MainPreferenceFragment()).commit();
-    }
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            // Show the Up button in the action bar.
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        getFragmentManager().beginTransaction().replace(R.id.settings_container, new MainPreferenceFragment()).commit();
     }
 
     public static class MainPreferenceFragment extends PreferenceFragment {
@@ -103,8 +100,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             Preference editProfileButton = findPreference(getString(R.string.pref_edit_profile_button_key));
             editProfileButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
-                public boolean onPreferenceClick(Preference preference) {
+                public boolean onPreferenceClick(Preference preference) { ;
                     Intent intent = new Intent(getActivity(), UserEditActivity.class);
+                    intent.putExtra("user_id", getActivity().getIntent().getIntExtra("user_id", -1));
                     intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                     startActivity(intent);
                     return true;

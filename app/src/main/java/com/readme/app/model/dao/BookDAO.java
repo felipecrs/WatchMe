@@ -68,10 +68,11 @@ public class BookDAO {
 
     public long save(Book model){
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.Books.USER_ID, model.getUser_id());
+        values.put(DatabaseHelper.Books.USER_ID, model.getUserId());
         values.put(DatabaseHelper.Books.TITLE, model.getTitle());
         values.put(DatabaseHelper.Books.AUTHOR, model.getAuthor());
         values.put(DatabaseHelper.Books.TOTAL_PAGES, model.getTotalPages());
+        values.put(DatabaseHelper.Books.ACTUAL_PAGE, model.getActualPage());
 
         if(model.get_id() != null){
             return getDatabase().update(DatabaseHelper.Books.TABLE, values, "_id = ?", new String[]{ model.get_id().toString()});

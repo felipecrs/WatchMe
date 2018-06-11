@@ -39,6 +39,13 @@ public class BookAdapter extends ArrayAdapter<Book> {
         TextView txtAuthor = view.findViewById(R.id.list_book_txtAuthor);
         txtAuthor.setText(book.getAuthor());
 
+        TextView txtReadPages = view.findViewById(R.id.list_book_txtReadPages);
+        if(book.getActualPage() > 0) {
+            txtReadPages.setText(context.getString(R.string.list_book_txtReadPages)+" "+book.getActualPage()+"/"+book.getTotalPages());
+        } else {
+            txtReadPages.setText("");
+        }
+
         return view;
     }
 

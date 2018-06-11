@@ -24,6 +24,9 @@ public class User {
         this.email = email;
     }
 
+    public User() {
+    }
+
     public Integer get_id() {
         return _id;
     }

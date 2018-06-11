@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import com.readme.app.control.SessionManager;
 import com.readme.app.R;
 import com.readme.app.model.dao.BookDAO;
 import com.readme.app.model.Book;
@@ -17,13 +16,13 @@ import com.readme.app.model.util.Validation;
 
 public class BookEditActivity extends AppCompatActivity {
 
-    EditText edtTitle;
-    EditText edtAuthor;
-    EditText edtTotalPages;
-    EditText edtActualPage;
+    private EditText edtTitle, edtAuthor, edtTotalPages, edtActualPage;
 
-    Book book;
-    BookDAO bookDAO;
+    private SessionManager sessionManager;
+    private BookDAO bookDAO;
+    private Book bookToEdit;
+
+    private Integer bookIdToEdit = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +31,6 @@ public class BookEditActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         edtTitle = findViewById(R.id.book_edit_edt_title);
@@ -40,34 +38,35 @@ public class BookEditActivity extends AppCompatActivity {
         edtTotalPages = findViewById(R.id.book_edit_edt_total_pages);
         edtActualPage = findViewById(R.id.book_edit_edtActualPage);
 
-        // Receiving book ID from parent activity
-        Integer id = null;
-        try{
-            id = Integer.parseInt(getIntent().getExtras().getString(getString(R.string.book_id_extra_key)));
-        } catch (Exception e) {
-        }
-
         bookDAO = new BookDAO(this);
+        sessionManager = new SessionManager(this);
+
+        // Receiving bookToEdit ID from parent activity
+        bookIdToEdit = getIntent().getIntExtra("book_id", -1);
 
         // Editing
-        if (id != null) {
-            book = bookDAO.searchByID(id);
-            loadFieldsWith(book);
+        if (bookIdToEdit != -1) {
+            bookToEdit = bookDAO.searchByID(bookIdToEdit);
+            loadFieldsWith(bookToEdit);
         }
         // Adding
         else {
+            bookToEdit = new Book();
+            bookToEdit.setUserId(sessionManager.getUserId());
             getSupportActionBar().setTitle(R.string.title_activity_book_add);
-            // TODO hide delete action
-
-            book = new Book();
-            book.setUser_id(new SessionManager(this).getUserId());
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.edit, menu);
-        return true;
+        // Editing
+        if (bookIdToEdit == -1) {
+            MenuItem actionDelete = menu.findItem(R.id.action_delete);
+            actionDelete.setEnabled(false);
+            actionDelete.setVisible(false);
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -81,6 +80,12 @@ public class BookEditActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
     }
 
     @Override
@@ -142,13 +147,20 @@ public class BookEditActivity extends AppCompatActivity {
         if(cancel) {
             focusView.requestFocus();
         } else {
-            book.setTitle(title);
-            book.setAuthor(author);
-            book.setTotalPages(totalPages);
-            book.setActualPage(actualPage);
+            bookToEdit.setTitle(title);
+            bookToEdit.setAuthor(author);
+            bookToEdit.setTotalPages(totalPages);
+            bookToEdit.setActualPage(actualPage);
 
-            if (bookDAO.save(book) != -1) {
-                Message.show(this, getString(R.string.message_book_added));
+            if (bookDAO.save(bookToEdit) != -1) {
+                // Editing
+                if (bookIdToEdit != 1) {
+                    Message.show(this, getString(R.string.message_book_edited));
+                }
+                // Adding
+                else {
+                    Message.show(this, getString(R.string.message_book_added));
+                }
                 setResult(RESULT_OK);
                 finish();
             } else {
@@ -158,7 +170,9 @@ public class BookEditActivity extends AppCompatActivity {
     }
 
     private void delete () {
-        bookDAO.delete(book.get_id());
+        bookDAO.delete(bookToEdit.get_id());
+        setResult(RESULT_OK);
+        finish();
     }
 
     private void loadFieldsWith(Book book) {

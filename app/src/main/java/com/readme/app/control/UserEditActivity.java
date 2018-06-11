@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.readme.app.control.SessionManager;
 import com.readme.app.R;
+import com.readme.app.model.Book;
 import com.readme.app.model.dao.UserDAO;
 import com.readme.app.model.User;
 import com.readme.app.model.util.Message;
@@ -18,11 +18,14 @@ import com.readme.app.model.util.Validation;
 
 public class UserEditActivity extends AppCompatActivity {
 
-    SessionManager sessionManager;
-    UserDAO userDAO;
-    User user;
-    TextView txtId;
-    EditText edtName, edtEmail;
+    private EditText edtName, edtEmail;
+    private TextView txtId;
+
+    private SessionManager sessionManager;
+    private UserDAO userDAO;
+    private User userToEdit;
+
+    private Integer userIdToEdit = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +43,30 @@ public class UserEditActivity extends AppCompatActivity {
         userDAO = new UserDAO(this);
         sessionManager = new SessionManager(this);
 
-        user = userDAO.searchByID(sessionManager.getUserId());
+        // Receiving userToEdit ID from parent activity
+        userIdToEdit = getIntent().getIntExtra("user_id", -1);
 
-        txtId.setText(user.get_id().toString());
-        edtName.setText(user.getName());
-        edtEmail.setText(user.getEmail());
+        // Editing
+        if (userIdToEdit != -1) {
+            userToEdit = userDAO.searchByID(sessionManager.getUserId());
+            loadFieldsWith(userToEdit);
+        }
+        // Adding
+        else {
+            userToEdit = new User();
+            getSupportActionBar().setTitle(R.string.title_activity_user_add);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.edit, menu);
+        // Editing
+        if (userIdToEdit != -1) {
+            MenuItem actionDelete = menu.findItem(R.id.action_delete);
+            actionDelete.setEnabled(false);
+            actionDelete.setVisible(false);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -65,6 +82,12 @@ public class UserEditActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
     }
 
     @Override
@@ -102,7 +125,7 @@ public class UserEditActivity extends AppCompatActivity {
 
         User emailFound = userDAO.searchByEmail(email);
 
-        if (emailFound != null && !emailFound.get_id().equals(user.get_id())) {
+        if (emailFound != null && !emailFound.get_id().equals(userToEdit.get_id())) {
             edtEmail.setError(getString(R.string.error_email_already_exist));
             focusView = edtEmail;
             cancel = true;
@@ -111,12 +134,19 @@ public class UserEditActivity extends AppCompatActivity {
         if(cancel) {
             focusView.requestFocus();
         } else {
-            user.setName(name);
-            user.setEmail(email);
+            userToEdit.setName(name);
+            userToEdit.setEmail(email);
 
-            if (userDAO.save(user) != -1) {
-                sessionManager.updateLoginSession(user.get_id(), user.getName(), user.getEmail());
-                Message.show(this, getString(R.string.message_user_updated));
+            if (userDAO.save(userToEdit) != -1) {
+                // Editing
+                if (userIdToEdit != 1) {
+                    sessionManager.updateLoginSession(userToEdit.get_id(), userToEdit.getName(), userToEdit.getEmail());
+                    Message.show(this, getString(R.string.message_user_updated));
+                }
+                // Adding
+                else {
+                    Message.show(this, getString(R.string.message_book_added));
+                }
                 setResult(RESULT_OK);
                 finish();
             } else {
@@ -126,7 +156,13 @@ public class UserEditActivity extends AppCompatActivity {
     }
 
     private void delete () {
-        userDAO.delete(user.get_id());
+        userDAO.delete(userToEdit.get_id());
         sessionManager.logout();
+    }
+
+    private void loadFieldsWith(User user) {
+        txtId.setText(user.get_id().toString());
+        edtName.setText(user.getName());
+        edtEmail.setText(user.getEmail());
     }
 }

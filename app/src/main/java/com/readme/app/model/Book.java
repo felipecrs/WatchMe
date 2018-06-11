@@ -2,23 +2,23 @@ package com.readme.app.model;
 
 public class Book {
     private Integer _id;
-    private Integer user_id;
+    private Integer userId;
     private String title;
     private String author;
     private Integer totalPages;
     private Integer actualPage;
 
-    public Book(Integer _id, Integer user_id, String title, String author, Integer totalPages, Integer actualPage) {
+    public Book(Integer _id, Integer userId, String title, String author, Integer totalPages, Integer actualPage) {
         this._id = _id;
-        this.user_id = user_id;
+        this.userId = userId;
         this.title = title;
         this.author = author;
         this.totalPages = totalPages;
         this.actualPage = actualPage;
     }
 
-    public Book(Integer user_id, String title, String author, Integer totalPages, Integer actualPage) {
-        this.user_id = user_id;
+    public Book(Integer userId, String title, String author, Integer totalPages, Integer actualPage) {
+        this.userId = userId;
         this.title = title;
         this.author = author;
         this.totalPages = totalPages;
@@ -37,12 +37,12 @@ public class Book {
         this._id = _id;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getTitle() {
