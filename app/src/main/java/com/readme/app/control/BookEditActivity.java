@@ -59,7 +59,7 @@ public class BookEditActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit, menu);
+        getMenuInflater().inflate(R.menu.menu_edit_common, menu);
         // Editing
         if (bookIdToEdit == -1) {
             MenuItem actionDelete = menu.findItem(R.id.action_delete);

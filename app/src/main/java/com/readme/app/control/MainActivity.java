@@ -5,10 +5,13 @@ import com.readme.app.model.Book;
 import com.readme.app.model.adapter.BookAdapter;
 import com.readme.app.model.dao.BookDAO;
 
-import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,11 +20,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.net.Inet4Address;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,23 +43,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        sessionManager = new SessionManager(this);
-        sessionManager.checkLogin();
-
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.title_activity_main);
 
         FloatingActionButton fab = findViewById(R.id.fab_add_book);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, BookEditActivity.class);
-                startActivityForResult(intent, UPDATE_BOOK_LIST_REQUEST);
-            }
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, BookEditActivity.class);
+            startActivityForResult(intent, UPDATE_BOOK_LIST_REQUEST);
         });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -74,19 +69,40 @@ public class MainActivity extends AppCompatActivity
         txtEmail = headerView.findViewById(R.id.nav_header_main_txtEmail);
         listViewBooks = findViewById(R.id.main_listViewBooks);
 
+        sessionManager = new SessionManager(this);
+
         bookDAO = new BookDAO(this);
         bookAdapter = new BookAdapter(this, bookDAO.listByUser(sessionManager.getUserId()));
         listViewBooks.setAdapter(bookAdapter);
-        listViewBooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Book book = (Book) parent.getItemAtPosition(position);
-                Intent intent = new Intent(MainActivity.this, BookEditActivity.class);
-                intent.putExtra("book_id", book.get_id());
-                startActivityForResult(intent, UPDATE_BOOK_LIST_REQUEST);
-            }
+        listViewBooks.setOnItemClickListener((parent, view, position, id) -> {
+            Book book = (Book) parent.getItemAtPosition(position);
+            startBookEditActivity(book.get_id());
         });
         updateUserDetails();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                showResults(newText);
+                return false;
+            }
+        });
+
+        return true;
     }
 
     @Override
@@ -128,7 +144,6 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.nav_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
-                intent.putExtra("user_id", sessionManager.getUserId());
                 startActivityForResult(intent, UPDATE_USER_DETAILS_REQUEST);
                 break;
         }
@@ -142,7 +157,38 @@ public class MainActivity extends AppCompatActivity
         txtName.setText(sessionManager.getUserName());
         txtEmail.setText(sessionManager.getUserEmail());
     }
+
     private void updateBookList() {
-        bookAdapter.refreshBooks(bookDAO.listByUser(sessionManager.getUserId()));
+        List<Book> books = bookDAO.listByUser(sessionManager.getUserId());
+        bookAdapter.refreshBooks(books);
     }
+
+    private void updateBookList(List<Book> books) {
+        bookAdapter.refreshBooks(books);
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            showResults(query);
+        }
+    }
+
+    private void showResults (String query) {
+        List<Book> books = bookDAO.getBookMatches(sessionManager.getUserId(), query);
+        updateBookList(books);
+    }
+
+    private void startBookEditActivity(Integer id) {
+        Intent intent = new Intent(MainActivity.this, BookEditActivity.class);
+        intent.putExtra("book_id", id);
+        startActivityForResult(intent, UPDATE_BOOK_LIST_REQUEST);
+    }
+
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.readme.app.control.DatabaseHelper;
 import com.readme.app.model.User;
 
 import java.util.ArrayList;
@@ -64,17 +63,19 @@ public class UserDAO {
     }
 
     public boolean delete(Integer id){
-        // Delete all books from this user
-        //Cursor cursor = getDatabase().query(DatabaseHelper.Books.TABLE,
-        //        DatabaseHelper.Books.COLUMNS,
-        //        "user_id = ?", new String[]{ id.toString() }, null, null, null);
-        //while(cursor.moveToNext()) {
-            getDatabase().delete(DatabaseHelper.Books.TABLE, "user_id = ?", new String[]{id.toString()});
-        //}
-
-
+        //deleteBooksFromUser(id);
         return getDatabase().delete(DatabaseHelper.Users.TABLE, "_id = ?", new String[]{Integer.toString(id)}) > 0;
     }
+
+    /*private void deleteBooksFromUser(Integer id) {
+        // Delete all books from this user
+        Cursor cursor = getDatabase().query(DatabaseHelper.Books.TABLE,
+                DatabaseHelper.Books.COLUMNS,
+                "user_id = ?", new String[]{ id.toString() }, null, null, null);
+        while(cursor.moveToNext()) {
+            getDatabase().delete(DatabaseHelper.Books.TABLE, "user_id = ?", new String[]{id.toString()});
+        }
+    }*/
 
     public User searchByID(int id){
         Cursor cursor = getDatabase().query(DatabaseHelper.Users.TABLE, DatabaseHelper.Users.COLUMNS, "_id = ?", new String[]{Integer.toString(id)}, null, null, null );

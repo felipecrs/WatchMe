@@ -98,34 +98,31 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_main);
 
             Preference editProfileButton = findPreference(getString(R.string.pref_edit_profile_button_key));
-            editProfileButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) { ;
-                    Intent intent = new Intent(getActivity(), UserEditActivity.class);
-                    intent.putExtra("user_id", getActivity().getIntent().getIntExtra("user_id", -1));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
-                    startActivity(intent);
-                    return true;
-                }
-            });
-
-            Preference listUsersButton = findPreference(getString(R.string.pref_list_users_button_key));
-            listUsersButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    startActivity(new Intent(getActivity(), UsersListActivity.class));
-                    return true;
-                }
+            editProfileButton.setOnPreferenceClickListener(preference -> { ;
+                Intent intent = new Intent(getActivity(), UserEditActivity.class);
+                intent.putExtra("user_id", new SessionManager(getActivity()).getUserId());
+                intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                startActivity(intent);
+                return true;
             });
 
             Preference logoutButton = findPreference(getString(R.string.pref_logout_button_key));
-            logoutButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    SessionManager sessionManager = new SessionManager(getActivity());
-                    sessionManager.logout();
-                    return true;
-                }
+            logoutButton.setOnPreferenceClickListener(preference -> {
+                SessionManager sessionManager = new SessionManager(getActivity());
+                sessionManager.logout();
+                return true;
+            });
+
+            Preference listUsersButton = findPreference(getString(R.string.pref_list_users_button_key));
+            listUsersButton.setOnPreferenceClickListener(preference -> {
+                startActivity(new Intent(getActivity(), UsersListActivity.class));
+                return true;
+            });
+
+            Preference listBooksButton = findPreference(getString(R.string.pref_list_books_button_key));
+            listBooksButton.setOnPreferenceClickListener(preference -> {
+                startActivity(new Intent(getActivity(), BooksListActivity.class));
+                return true;
             });
         }
 

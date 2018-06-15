@@ -27,7 +27,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <TextView
-            android:id="@+id/list_book_txtAuthor"
+            android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/sample_bookAuthor"

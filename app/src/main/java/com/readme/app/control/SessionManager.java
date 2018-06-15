@@ -75,6 +75,7 @@ public class SessionManager {
     private void startLoginActivity(){
         Intent intent = new Intent(context, LoginActivity.class);
 
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.finishAffinity();
 
         context.startActivity(intent);

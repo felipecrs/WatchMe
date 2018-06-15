@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.readme.app.R;
-import com.readme.app.model.Book;
 import com.readme.app.model.dao.UserDAO;
 import com.readme.app.model.User;
 import com.readme.app.model.util.Message;
@@ -60,9 +59,9 @@ public class UserEditActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit, menu);
+        getMenuInflater().inflate(R.menu.menu_edit_common, menu);
         // Editing
-        if (userIdToEdit != -1) {
+        if (userIdToEdit == -1) {
             MenuItem actionDelete = menu.findItem(R.id.action_delete);
             actionDelete.setEnabled(false);
             actionDelete.setVisible(false);
@@ -157,6 +156,7 @@ public class UserEditActivity extends AppCompatActivity {
 
     private void delete () {
         userDAO.delete(userToEdit.get_id());
+        Message.show(this, getString(R.string.message_user_deleted));
         sessionManager.logout();
     }
 

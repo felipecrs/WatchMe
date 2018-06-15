@@ -16,7 +16,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_main_name">Name</string>
-    <string name="nav_header_main_email">email@domain.com</string>
+    <string name="nav_header_main_email" translatable="false">email@domain.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="nav_settings">Settings</string>
 
@@ -38,7 +38,7 @@
     <string name="pref_logout">Logout</string>
     <string name="pref_edit_profile_button_key" translatable="false">pref_btnEditProfile</string>
     <string name="pref_logout_button_key" translatable="false">pref_btnLogout</string>
-    <string name="user_edit_txtDefaultId">999</string>
+    <string name="user_edit_txtDefaultId" translatable="false">999</string>
 
     <!-- Error strings -->
     <string name="error_title_invalid">This title is invalid</string>
@@ -50,32 +50,41 @@
     <string name="error_field_required">This field is required</string>
 
     <!-- Messages strings -->
-    <string name="message_user_registered">This account was created.</string>
-    <string name="message_book_added">This book was added to your library</string>
-    <string name="message_error_database">Error ocurred in database</string>
+    <string name="message_user_registered">User registered</string>
+    <string name="message_book_added">Book added</string>
+    <string name="message_error_database">Database error</string>
     <string name="user_edit_txtName">Name</string>
     <string name="user_edit_txtEmail">Email</string>
-    <string name="user_edit_txtId">ID:</string>
+    <string name="user_edit_txtId" translatable="false">ID:</string>
     <string name="title_activity_user_edit">Edit user</string>
-    <string name="error_invalid_name">This name is invalid.</string>
-    <string name="error_email_already_exist">This email is already used</string>
-    <string name="message_user_updated">User details updated.</string>
+    <string name="error_invalid_name">Invalid name</string>
+    <string name="error_email_already_exist">Email already used</string>
+    <string name="message_user_updated">Account updated</string>
     <string name="book_edit_txtActualPage">Actual page</string>
-    <string name="error_wrong_password">This password is wrong</string>
+    <string name="error_wrong_password">Incorrect password</string>
     <string name="title_activity_book_add">Add book</string>
     <string name="book_id_extra_key" translatable="false">book_id</string>
     <string name="pref_category_account">Account</string>
     <string name="pref_list_users">List users</string>
     <string name="pref_list_users_button_key" translatable="false">pref_btnListUsers</string>
-    <string name="pref_list_users_summary">List all users registered on system</string>
+    <string name="pref_list_users_summary">List all users on database</string>
     <string name="title_activity_users_list">Users list</string>
     <string name="sample_email">email@domain.com</string>
     <string name="sample_bookTitle">Sample Title Book</string>
-    <string name="sample_bookAuthor">Author Name</string>
+    <string name="sample_bookAuthor">" Sample Author Name"</string>
     <string name="title_activity_user_add">User register</string>
-    <string name="message_book_edited">Book details updated</string>
+    <string name="message_book_edited">Book updated</string>
     <string name="sample_bookReadPages">Read 1/100</string>
     <string name="list_book_txtReadPages">Read</string>
     <string name="list_book_not_started">Not started to read</string>
+    <string name="action_settings">Settings</string>
+    <string name="message_user_deleted">User removed</string>
+    <string name="search_title">Search books</string>
+    <string name="search_books_hint">Search books</string>
+    <string name="title_activity_books_list">Books</string>
+    <string name="pref_category_database">Database</string>
+    <string name="pref_list_books">List books</string>
+    <string name="pref_list_books_summary">List all books on database</string>
+    <string name="pref_list_books_button_key" translatable="false">pref_btnListBooks</string>
 
 </resources>

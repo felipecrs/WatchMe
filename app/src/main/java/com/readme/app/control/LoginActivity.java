@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.title_activity_login));
 
         mEmailView = findViewById(R.id.email);
         mPasswordView = findViewById(R.id.password);
@@ -47,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         sessionManager = new SessionManager(this);
+        if(sessionManager.isLoggedIn()) {
+            startActivity(new Intent(this, MainActivity.class));
+        }
         userDAO = new UserDAO(this);
     }
 
