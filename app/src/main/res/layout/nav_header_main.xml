@@ -32,6 +32,6 @@
         android:id="@+id/nav_header_main_txtEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nav_header_main_email" />
+        android:text="@string/sample_email" />
 
 </LinearLayout>

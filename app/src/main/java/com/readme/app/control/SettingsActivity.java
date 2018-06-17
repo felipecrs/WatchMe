@@ -5,13 +5,9 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.readme.app.R;
 
@@ -81,7 +77,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_settings);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -92,15 +87,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
     public static class MainPreferenceFragment extends PreferenceFragment {
+
+        private SessionManager sessionManager;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_main);
 
+            sessionManager = SessionManager.getInstance(getActivity());
+
             Preference editProfileButton = findPreference(getString(R.string.pref_edit_profile_button_key));
             editProfileButton.setOnPreferenceClickListener(preference -> { ;
                 Intent intent = new Intent(getActivity(), UserEditActivity.class);
-                intent.putExtra("user_id", new SessionManager(getActivity()).getUserId());
+                intent.putExtra("user_id", sessionManager.getUserId());
                 intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(intent);
                 return true;
@@ -108,8 +108,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             Preference logoutButton = findPreference(getString(R.string.pref_logout_button_key));
             logoutButton.setOnPreferenceClickListener(preference -> {
-                SessionManager sessionManager = new SessionManager(getActivity());
-                sessionManager.logout();
+                sessionManager.logout(getActivity());
                 return true;
             });
 

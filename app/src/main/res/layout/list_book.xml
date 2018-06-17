@@ -5,25 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
-
     <ImageView
-
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:scaleType="center"
+        android:id="@+id/list_book_image_cover"
+        android:layout_width="128dp"
+        android:layout_height="256dp"
+        android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_book_black_24dp" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/list_book_txtTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/sample_bookTitle"
+            android:gravity="left|top"
+            android:padding="@dimen/activity_horizontal_margin"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <TextView
@@ -31,15 +31,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/sample_bookAuthor"
+            android:gravity="left|top"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle" />
+
+        <TextView
+            android:id="@+id/list_book_txtReadPages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right|bottom"
+            android:text="@string/sample_bookReadPages"
+            android:padding="@dimen/activity_horizontal_margin"
             android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/list_book_txtReadPages"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="right|center"
-        android:text="@string/sample_bookReadPages"
-        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"/>
 
 </LinearLayout>

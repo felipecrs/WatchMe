@@ -23,7 +23,6 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -50,8 +49,7 @@ public class MainActivity extends AppCompatActivity
 
         FloatingActionButton fab = findViewById(R.id.fab_add_book);
         fab.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, BookEditActivity.class);
-            startActivityForResult(intent, UPDATE_BOOK_LIST_REQUEST);
+            startBookEditActivity(null);
         });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -69,15 +67,16 @@ public class MainActivity extends AppCompatActivity
         txtEmail = headerView.findViewById(R.id.nav_header_main_txtEmail);
         listViewBooks = findViewById(R.id.main_listViewBooks);
 
-        sessionManager = new SessionManager(this);
+        sessionManager = SessionManager.getInstance(this);
 
         bookDAO = new BookDAO(this);
         bookAdapter = new BookAdapter(this, bookDAO.listByUser(sessionManager.getUserId()));
         listViewBooks.setAdapter(bookAdapter);
         listViewBooks.setOnItemClickListener((parent, view, position, id) -> {
             Book book = (Book) parent.getItemAtPosition(position);
-            startBookEditActivity(book.get_id());
+            startBookEditActivity(book.getId());
         });
+        updateBookList();
         updateUserDetails();
     }
 
@@ -161,10 +160,12 @@ public class MainActivity extends AppCompatActivity
     private void updateBookList() {
         List<Book> books = bookDAO.listByUser(sessionManager.getUserId());
         bookAdapter.refreshBooks(books);
+        bookDAO.close();
     }
 
     private void updateBookList(List<Book> books) {
         bookAdapter.refreshBooks(books);
+        bookDAO.close();
     }
 
 
@@ -187,7 +188,11 @@ public class MainActivity extends AppCompatActivity
 
     private void startBookEditActivity(Integer id) {
         Intent intent = new Intent(MainActivity.this, BookEditActivity.class);
-        intent.putExtra("book_id", id);
+        intent.putExtra("user_id", sessionManager.getUserId());
+        if (id != null) {
+            // Start BookEditActivity for editing
+            intent.putExtra("book_id", id);
+        }
         startActivityForResult(intent, UPDATE_BOOK_LIST_REQUEST);
     }
 

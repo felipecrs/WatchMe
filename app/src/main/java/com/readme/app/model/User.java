@@ -1,38 +1,28 @@
 package com.readme.app.model;
 
 public class User {
-    private Integer _id;
+    private Integer id;
     private String name;
     private String email;
     private String password;
 
-    public User(Integer _id, String name, String email, String password) {
-        this._id = _id;
+    public User(Integer id, String name, String email, String password) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-    }
-
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    public User(Integer _id, String name, String email) {
-        this._id = _id;
-        this.name = name;
-        this.email = email;
     }
 
     public User() {
+        this.id = -1;
     }
 
-    public Integer get_id() {
-        return _id;
+    public Integer getId() {
+        return id;
     }
 
-    public void set_id(Integer _id) {
-        this._id = _id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -57,6 +47,10 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean passwordMatch(String password) {
+        return this.password.equals(password);
     }
 
 }

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/toolbar"></include>
+        <include layout="@layout/toolbar_common"></include>
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />

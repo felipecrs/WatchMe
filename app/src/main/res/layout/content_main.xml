@@ -11,8 +11,6 @@
     <ListView
         android:id="@+id/main_listViewBooks"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:dividerHeight="8dp"
-        android:padding="@dimen/activity_vertical_margin"></ListView>
+        android:layout_height="wrap_content"/>
 
 </android.support.constraint.ConstraintLayout>

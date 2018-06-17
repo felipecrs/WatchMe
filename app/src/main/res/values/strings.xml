@@ -5,18 +5,14 @@
     <string name="title_activity_login">Login</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
 
     <!-- Strings related to Main -->
     <string name="title_activity_main">Library</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_main_name">Name</string>
-    <string name="nav_header_main_email" translatable="false">email@domain.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="nav_settings">Settings</string>
 
@@ -38,28 +34,27 @@
     <string name="pref_logout">Logout</string>
     <string name="pref_edit_profile_button_key" translatable="false">pref_btnEditProfile</string>
     <string name="pref_logout_button_key" translatable="false">pref_btnLogout</string>
-    <string name="user_edit_txtDefaultId" translatable="false">999</string>
+    <string name="user_edit_txtDefaultId">not registered</string>
 
     <!-- Error strings -->
-    <string name="error_title_invalid">This title is invalid</string>
-    <string name="error_author_invalid">This author name is invalid</string>
-    <string name="error_invalid_pages_quantity">This total pages number is invalid</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="error_title_invalid">Title invalid</string>
+    <string name="error_author_invalid">Author name invalid</string>
+    <string name="error_invalid_pages_quantity">Total pages invalid</string>
+    <string name="error_email_invalid">Email address invalid</string>
+    <string name="error_invalid_password">Password too short</string>
+    <string name="error_field_required">Field required</string>
 
     <!-- Messages strings -->
     <string name="message_user_registered">User registered</string>
     <string name="message_book_added">Book added</string>
     <string name="message_error_database">Database error</string>
-    <string name="user_edit_txtName">Name</string>
+    <string name="user_edit_txtName">Name (optional)</string>
     <string name="user_edit_txtEmail">Email</string>
     <string name="user_edit_txtId" translatable="false">ID:</string>
     <string name="title_activity_user_edit">Edit user</string>
-    <string name="error_invalid_name">Invalid name</string>
+    <string name="error_invalid_name">Name invalid</string>
     <string name="error_email_already_exist">Email already used</string>
-    <string name="message_user_updated">Account updated</string>
+    <string name="message_user_updated">Profile updated</string>
     <string name="book_edit_txtActualPage">Actual page</string>
     <string name="error_wrong_password">Incorrect password</string>
     <string name="title_activity_book_add">Add book</string>
@@ -86,5 +81,11 @@
     <string name="pref_list_books">List books</string>
     <string name="pref_list_books_summary">List all books on database</string>
     <string name="pref_list_books_button_key" translatable="false">pref_btnListBooks</string>
+    <string name="cover">Cover</string>
+    <string name="message_permission_denied">Permission denied</string>
+    <string name="message_ask_permission">Permission needed</string>
+    <string name="action_sign_up">Register</string>
+    <string name="error_email_user_not_found">Email not found</string>
+    <string name="user_edit_password_text">Password</string>
 
 </resources>

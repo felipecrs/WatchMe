@@ -3,10 +3,10 @@ package com.readme.app.model.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
+import android.graphics.Bitmap;
 
 import com.readme.app.model.Book;
+import com.readme.app.model.util.Converter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,43 +14,28 @@ import java.util.List;
 public class BookDAO {
 
     private DatabaseHelper databaseHelper;
-    private SQLiteDatabase readableDatabase;
-    private SQLiteDatabase writableDatabase;
 
     public BookDAO(Context context) {
-        databaseHelper = new DatabaseHelper(context);
-    }
-
-    private SQLiteDatabase getReadableDatabase() {
-        if (readableDatabase == null) {
-            readableDatabase = databaseHelper.getReadableDatabase();
-        }
-        return readableDatabase;
-    }
-
-    private SQLiteDatabase getWritableDatabase() {
-        if (writableDatabase == null) {
-            writableDatabase = databaseHelper.getWritableDatabase();
-        }
-        return writableDatabase;
+        databaseHelper = DatabaseHelper.getInstance(context);
     }
 
     private Book create(Cursor cursor){
         Book model = new Book(
-                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.Books._ID)),
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.Books.ID)),
                 cursor.getInt(cursor.getColumnIndex(DatabaseHelper.Books.USER_ID)),
                 cursor.getString(cursor.getColumnIndex(DatabaseHelper.Books.TITLE)),
                 cursor.getString(cursor.getColumnIndex(DatabaseHelper.Books.AUTHOR)),
                 cursor.getInt(cursor.getColumnIndex(DatabaseHelper.Books.TOTAL_PAGES)),
-                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.Books.ACTUAL_PAGE)));
-
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.Books.ACTUAL_PAGE)),
+                Converter.getBitmapFromByteArray(cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.Books.IMAGE))));
         return model;
     }
 
     public List<Book> list(){
         Cursor cursor = query(null, null);
 
-        List<Book> books = new ArrayList<Book>();
+        List<Book> books = new ArrayList<>();
+
         if (cursor != null) {
             do {
                 Book model = create(cursor);
@@ -86,19 +71,20 @@ public class BookDAO {
         values.put(DatabaseHelper.Books.AUTHOR, model.getAuthor());
         values.put(DatabaseHelper.Books.TOTAL_PAGES, model.getTotalPages());
         values.put(DatabaseHelper.Books.ACTUAL_PAGE, model.getActualPage());
+        values.put(DatabaseHelper.Books.IMAGE, Converter.getBitmapAsByteArray(model.getImage()));
 
-        if(model.get_id() != null){
-            return getWritableDatabase().update(DatabaseHelper.Books.TABLE, values, "_id = ?", new String[]{ model.get_id().toString()});
+        if(model.getId() != -1){
+            return databaseHelper.getWritableDatabase().update(DatabaseHelper.Books.TABLE, values, DatabaseHelper.Books.ID+" = ?", new String[]{ model.getId().toString()});
         }
-        return getWritableDatabase().insert(DatabaseHelper.Books.TABLE, null, values);
+        return databaseHelper.getWritableDatabase().insert(DatabaseHelper.Books.TABLE, null, values);
     }
 
     public boolean delete(Integer id){
-        return getWritableDatabase().delete(DatabaseHelper.Books.TABLE, "_id = ?", new String[]{ id.toString() }) > 0;
+        return databaseHelper.getWritableDatabase().delete(DatabaseHelper.Books.TABLE, DatabaseHelper.Books.ID+" = ?", new String[]{ id.toString() }) > 0;
     }
 
-    public Book searchByID(Integer id){
-        String selection = DatabaseHelper.Books._ID + " = ?";
+    public Book findById(Integer id){
+        String selection = DatabaseHelper.Books.ID + " = ?";
         String[] selectionArgs = new String[] { id.toString() };
 
         Cursor cursor = query(selection, selectionArgs);
@@ -117,7 +103,7 @@ public class BookDAO {
 
         Cursor cursor = query(selection, selectionArgs);
 
-        List<Book> books = new ArrayList<Book>();
+        List<Book> books = new ArrayList<>();
 
         if(cursor != null ) {
             do {
@@ -131,7 +117,7 @@ public class BookDAO {
 
     private Cursor query(String selection, String[] selectionArgs) {
 
-        Cursor cursor = getReadableDatabase().query(DatabaseHelper.Books.TABLE, DatabaseHelper.Books.COLUMNS, selection, selectionArgs, null, null, null );
+        Cursor cursor = databaseHelper.getReadableDatabase().query(DatabaseHelper.Books.TABLE, DatabaseHelper.Books.COLUMNS, selection, selectionArgs, null, null, null );
 
         if (cursor == null) {
             return null;
@@ -144,8 +130,6 @@ public class BookDAO {
 
     public void close(){
         databaseHelper.close();
-        readableDatabase = null;
-        writableDatabase = null;
     }
 
 }

@@ -3,7 +3,6 @@ package com.readme.app.model.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.readme.app.model.User;
 
@@ -13,22 +12,14 @@ import java.util.List;
 public class UserDAO {
 
     private DatabaseHelper databaseHelper;
-    private SQLiteDatabase database;
 
     public UserDAO(Context context) {
-        databaseHelper = new DatabaseHelper(context);
-    }
-
-    private SQLiteDatabase getDatabase(){
-        if(database == null) {
-            database = databaseHelper.getWritableDatabase();
-        }
-        return database;
+        databaseHelper = DatabaseHelper.getInstance(context);
     }
 
     private User create(Cursor cursor){
         User model = new User(
-                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.Users._ID)),
+                cursor.getInt(cursor.getColumnIndex(DatabaseHelper.Users.ID)),
                 cursor.getString(cursor.getColumnIndex(DatabaseHelper.Users.NAME)),
                 cursor.getString(cursor.getColumnIndex(DatabaseHelper.Users.EMAIL)),
                 cursor.getString(cursor.getColumnIndex(DatabaseHelper.Users.PASSWORD)));
@@ -37,16 +28,17 @@ public class UserDAO {
     }
 
     public List<User> list(){
-        Cursor cursor = getDatabase().query(DatabaseHelper.Users.TABLE,
-                                            DatabaseHelper.Users.COLUMNS,
-                                            null, null, null, null, null);
-        List<User> users = new ArrayList<User>();
-        while(cursor.moveToNext()){
-            User model = create(cursor);
-            users.add(model);
-        }
-        cursor.close();
+        Cursor cursor = query(null, null);
 
+        List<User> users = new ArrayList<>();
+
+        if (cursor != null) {
+            do {
+                User model = create(cursor);
+                users.add(model);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
         return users;
     }
 
@@ -56,31 +48,23 @@ public class UserDAO {
         values.put(DatabaseHelper.Users.EMAIL, model.getEmail());
         values.put(DatabaseHelper.Users.PASSWORD, model.getPassword());
 
-        if(model.get_id() != null){
-            return getDatabase().update(DatabaseHelper.Users.TABLE, values, "_id = ?", new String[]{ model.get_id().toString()});
+        if(model.getId() != -1){
+            return databaseHelper.getWritableDatabase().update(DatabaseHelper.Users.TABLE, values, DatabaseHelper.Users.ID+" = ?", new String[]{ model.getId().toString()});
         }
-        return getDatabase().insert(DatabaseHelper.Users.TABLE, null, values);
+        return databaseHelper.getWritableDatabase().insert(DatabaseHelper.Users.TABLE, null, values);
     }
 
     public boolean delete(Integer id){
-        //deleteBooksFromUser(id);
-        return getDatabase().delete(DatabaseHelper.Users.TABLE, "_id = ?", new String[]{Integer.toString(id)}) > 0;
+        return databaseHelper.getWritableDatabase().delete(DatabaseHelper.Users.TABLE, DatabaseHelper.Users.ID+" = ?", new String[]{Integer.toString(id)}) > 0;
     }
 
-    /*private void deleteBooksFromUser(Integer id) {
-        // Delete all books from this user
-        Cursor cursor = getDatabase().query(DatabaseHelper.Books.TABLE,
-                DatabaseHelper.Books.COLUMNS,
-                "user_id = ?", new String[]{ id.toString() }, null, null, null);
-        while(cursor.moveToNext()) {
-            getDatabase().delete(DatabaseHelper.Books.TABLE, "user_id = ?", new String[]{id.toString()});
-        }
-    }*/
+    public User findById(Integer id){
+        String selection = DatabaseHelper.Users.ID + " = ?";
+        String[] selectionArgs = new String[] { id.toString() };
 
-    public User searchByID(int id){
-        Cursor cursor = getDatabase().query(DatabaseHelper.Users.TABLE, DatabaseHelper.Users.COLUMNS, "_id = ?", new String[]{Integer.toString(id)}, null, null, null );
+        Cursor cursor = query(selection, selectionArgs);
 
-        if(cursor.moveToFirst()){
+        if(cursor != null) {
             User model = create(cursor);
             cursor.close();
             return model;
@@ -88,24 +72,34 @@ public class UserDAO {
         return null;
     }
 
-    public User searchByEmail(String email){
-        Cursor cursor = getDatabase().query(DatabaseHelper.Users.TABLE, DatabaseHelper.Users.COLUMNS, "email = ?", new String[]{email}, null, null, null );
+    public User findByEmail(String email){
+        String selection = DatabaseHelper.Users.EMAIL + " = ?";
+        String[] selectionArgs = new String[] { email };
 
-        if(cursor.moveToFirst()) {
+        Cursor cursor = query(selection, selectionArgs);
+
+        if(cursor != null) {
             User model = create(cursor);
             cursor.close();
             return model;
         }
         return null;
+    }
+
+    private Cursor query(String selection, String[] selectionArgs) {
+
+        Cursor cursor = databaseHelper.getReadableDatabase().query(DatabaseHelper.Users.TABLE, DatabaseHelper.Users.COLUMNS, selection, selectionArgs, null, null, null );
+
+        if (cursor == null) {
+            return null;
+        } else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
     }
 
     public void close(){
         databaseHelper.close();
-        database = null;
-    }
-
-    public boolean isValidCredentials(String email, String password) {
-        User model = searchByEmail(email);
-        return model != null && model.getPassword().equals(password);
     }
 }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.readme.app.R;
@@ -25,6 +26,11 @@ public class BookAdapter extends ArrayAdapter<Book> {
         this.books = books;
     }
 
+    public BookAdapter(@NonNull Context context) {
+        super(context, 0);
+        this.context = context;
+    }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View view, @NonNull ViewGroup parent) {
@@ -32,6 +38,11 @@ public class BookAdapter extends ArrayAdapter<Book> {
             view = LayoutInflater.from(context).inflate(R.layout.list_book,parent,false);
 
         Book book = books.get(position);
+
+        if(book.getImage() != null) {
+            ImageView coverImage = view.findViewById(R.id.list_book_image_cover);
+            coverImage.setImageBitmap(book.getImage());
+        }
 
         TextView txtTitle = view.findViewById(R.id.list_book_txtTitle);
         txtTitle.setText(book.getTitle());
@@ -43,7 +54,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         if(book.getActualPage() > 0) {
             txtReadPages.setText(context.getString(R.string.list_book_txtReadPages)+" "+book.getActualPage()+"/"+book.getTotalPages());
         } else {
-            txtReadPages.setText("");
+            txtReadPages.setText(context.getString(R.string.list_book_not_started));
         }
 
         return view;

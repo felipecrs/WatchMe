@@ -7,15 +7,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.readme.app.R;
 import com.readme.app.model.dao.UserDAO;
 import com.readme.app.model.User;
-import com.readme.app.model.util.Message;
 import com.readme.app.model.util.Validation;
 
 public class LoginActivity extends AppCompatActivity {
@@ -23,90 +20,96 @@ public class LoginActivity extends AppCompatActivity {
 
     private SessionManager sessionManager;
 
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
+    private EditText emailEdit;
+    private EditText passwordEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
 
+        // Setting up action bar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setTitle(getString(R.string.title_activity_login));
 
-        mEmailView = findViewById(R.id.email);
-        mPasswordView = findViewById(R.id.password);
+        emailEdit = findViewById(R.id.edit_email);
+        passwordEdit = findViewById(R.id.edit_password);
 
-        Button mEmailSignInButton = findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+        Button signInButton = findViewById(R.id.button_sign_in);
+        signInButton.setOnClickListener(view -> signIn());
+        Button signUpButton = findViewById(R.id.button_sign_up);
+        signUpButton.setOnClickListener(view -> signUp());
 
-        sessionManager = new SessionManager(this);
+        userDAO = new UserDAO(this);
+        sessionManager = SessionManager.getInstance(this);
         if(sessionManager.isLoggedIn()) {
             startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
-        userDAO = new UserDAO(this);
     }
 
-    private void attemptLogin() {
+    private void signUp() {
+        String email = emailEdit.getText().toString();
+        String password = passwordEdit.getText().toString();
 
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        Intent intent = new Intent(this, UserEditActivity.class);
+        intent.putExtra("user_email", email);
+        intent.putExtra("user_password", password);
+        startActivity(intent);
+    }
+
+    private void signIn() {
+
+        String email = emailEdit.getText().toString();
+        String password = passwordEdit.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password.
         if (TextUtils.isEmpty(password)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
+            passwordEdit.setError(getString(R.string.error_field_required));
+            focusView = passwordEdit;
             cancel = true;
         } else if (!Validation.isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+            passwordEdit.setError(getString(R.string.error_invalid_password));
+            focusView = passwordEdit;
             cancel = true;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+            emailEdit.setError(getString(R.string.error_field_required));
+            focusView = emailEdit;
             cancel = true;
         } else if (!Validation.isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+            emailEdit.setError(getString(R.string.error_email_invalid));
+            focusView = emailEdit;
             cancel = true;
         }
 
         if (cancel) {
             focusView.requestFocus();
         } else {
-            if (userDAO.searchByEmail(email) != null) {
-                if (userDAO.isValidCredentials(email, password)) {
-                    User user = userDAO.searchByEmail(email);
-                    sessionManager.updateLoginSession(user.get_id(), user.getName(), user.getEmail());
+            User user = userDAO.findByEmail(email);
+            if (user != null) {
+                // User found
+                if (user.passwordMatch(password)) {
+                    // Password match
+                    sessionManager.updateLoginSession(user.getId(), user.getName(), user.getEmail());
                     startActivity(new Intent(this, MainActivity.class));
                     finish();
                 } else {
-                    mPasswordView.setError(getString(R.string.error_wrong_password));
-                    mPasswordView.requestFocus();
+                    // Password do not match
+                    passwordEdit.setError(getString(R.string.error_wrong_password));
+                    passwordEdit.requestFocus();
                 }
             } else {
-                if (userDAO.save(new User(email, password)) != -1) {
-                    User user = userDAO.searchByEmail(email);
-                    sessionManager.updateLoginSession(user.get_id(), user.getName(), user.getEmail());
-                    startActivity(new Intent(this, MainActivity.class));
-                    finish();
-                    Message.show(LoginActivity.this, getString(R.string.message_user_registered));
-                } else {
-                    Message.show(LoginActivity.this, getString(R.string.message_error_database));
-                }
+                // User not found
+                emailEdit.setError(getString(R.string.error_email_user_not_found));
+                emailEdit.requestFocus();
             }
         }
     }

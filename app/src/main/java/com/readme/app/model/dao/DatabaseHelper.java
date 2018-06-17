@@ -4,14 +4,21 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.readme.app.model.Book;
+public final class DatabaseHelper extends SQLiteOpenHelper {
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+    private static DatabaseHelper instance = null;
 
-    private static final String DATABASE_NAME = "readmedatabase";
+    private static final String DATABASE_NAME = "readme_db";
     private static final int DATABASE_VERSION = 1;
 
-    public DatabaseHelper(Context context) {
+    public static DatabaseHelper getInstance(Context context) {
+        if (instance == null) {
+            instance = new DatabaseHelper(context.getApplicationContext());
+        }
+        return instance;
+    }
+
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -19,20 +26,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //Users table
         String sqlUsers = "CREATE TABLE "+Users.TABLE+"("
-                +Users._ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "
+                +Users.ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
                 +Users.NAME+" TEXT, "
                 +Users.EMAIL+" TEXT NOT NULL, "
                 +Users.PASSWORD+" TEXT NOT NULL)";
 
         //Books table
         String sqlBooks = "CREATE TABLE "+ Books.TABLE+"("
-                +Books._ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "
+                +Books.ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "
+                +Books.USER_ID+" INTEGER NOT NULL, "
                 +Books.TITLE+" TEXT NOT NULL, "
                 +Books.AUTHOR+" TEXT NOT NULL, "
                 +Books.TOTAL_PAGES+" INTEGER NOT NULL, "
                 +Books.ACTUAL_PAGE+" INTEGER, "
-                +Books.USER_ID+" INTEGER NOT NULL, "
-                +" FOREIGN KEY("+Books.USER_ID+") REFERENCES "+Users.TABLE+"("+Users._ID+") ON DELETE CASCADE)";
+                +Books.IMAGE+" BLOB, "
+                +" FOREIGN KEY("+Books.USER_ID+") REFERENCES "+Users.TABLE+"("+Users.ID +") ON DELETE CASCADE)";
 
         db.execSQL(sqlUsers);
         db.execSQL(sqlBooks);
@@ -59,25 +67,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static class Users{
         public static final String TABLE = "users";
 
-        public static final String _ID = "_id";
+        public static final String ID = "id";
         public static final String NAME = "name";
         public static final String EMAIL = "email";
         public static final String PASSWORD = "password";
 
-        public static final String[] COLUMNS = { _ID, NAME, EMAIL, PASSWORD};
+        public static final String[] COLUMNS = {ID, NAME, EMAIL, PASSWORD};
     }
 
     public static class Books{
         public static final String TABLE = "books";
 
-        public static final String _ID = "_id";
+        public static final String ID = "id";
+        public static final String USER_ID = "user_id";
         public static final String TITLE = "title";
         public static final String AUTHOR = "author";
         public static final String TOTAL_PAGES = "totalPages";
         public static final String ACTUAL_PAGE = "actualPage";
-        public static final String USER_ID = "user_id";
+        public static final String IMAGE = "image";
 
-        public static final String[] COLUMNS = { _ID, TITLE, AUTHOR, TOTAL_PAGES, ACTUAL_PAGE, USER_ID};
+        public static final String[] COLUMNS = {ID, USER_ID, TITLE, AUTHOR, TOTAL_PAGES, ACTUAL_PAGE, IMAGE};
     }
 
 }

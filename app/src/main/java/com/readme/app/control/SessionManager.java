@@ -5,47 +5,45 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-public class SessionManager {
+public final class SessionManager {
+
+    private static SessionManager instance = null;
 
     private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
-
-    Context context;
-    Activity activity;
+    private Context context;
 
     private static final int PRIVATE_MODE = 0;
+    private static final String PREFERENCES_NAME = "login_settings";
+    private static final String KEY_LOGGED_IN = "loggedIn";
+    private static final String KEY_USER_ID = "user_id";
+    private static final String KEY_USER_NAME = "name";
+    private static final String KEY_USER_EMAIL = "email";
 
-    private static final String PREFERENCES_NAME = "settings";
+    public static SessionManager getInstance(Context context) {
+        if (instance == null) {
+            instance = new SessionManager(context.getApplicationContext());
+        }
+        return instance;
+    }
 
-    private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
-
-    public static final String KEY_USER_ID = "_id";
-
-    public static final String KEY_USER_NAME = "name";
-
-    public static final String KEY_USER_EMAIL = "email";
-
-    public SessionManager(Activity activity) {
-        this.activity = activity;
-        this.context = activity.getApplicationContext();
-        preferences = context.getSharedPreferences(PREFERENCES_NAME, PRIVATE_MODE);
-        editor = preferences.edit();
+    private SessionManager(Context context) {
+        this.context = context.getApplicationContext();
+        preferences = this.context.getSharedPreferences(PREFERENCES_NAME, PRIVATE_MODE);
     }
 
     public void updateLoginSession(Integer _id, String name, String email) {
-        editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putBoolean(KEY_LOGGED_IN, true);
         editor.putInt(KEY_USER_ID, _id);
         editor.putString(KEY_USER_NAME, name);
         editor.putString(KEY_USER_EMAIL,email);
-        editor.commit();
+
+        editor.apply();
     }
 
     public Integer getUserId(){
-        Integer result = preferences.getInt(KEY_USER_ID, -1);
-        if (result != -1) {
-            return result;
-        }
-        return null;
+        return preferences.getInt(KEY_USER_ID, -1);
     }
 
     public String getUserName(){
@@ -56,28 +54,25 @@ public class SessionManager {
         return preferences.getString(KEY_USER_EMAIL, null);
     }
 
-    public void logout(){
+    public void logout(Activity activity){
+        SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
-        editor.commit();
-        startLoginActivity();
+        editor.apply();
+
+        startLoginActivity(activity);
     }
 
-    public boolean isLoggedIn() {
-        return preferences.getBoolean(KEY_IS_LOGGED_IN, false);
-    }
-
-    public void checkLogin() {
-        if (!isLoggedIn()) {
-            startLoginActivity();
-        }
-    }
-
-    private void startLoginActivity(){
+    private void startLoginActivity(Activity activity){
         Intent intent = new Intent(context, LoginActivity.class);
-
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         activity.finishAffinity();
 
         context.startActivity(intent);
     }
+
+    public boolean isLoggedIn() {
+        return preferences.getBoolean(KEY_LOGGED_IN, false);
+    }
+
 }

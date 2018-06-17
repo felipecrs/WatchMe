@@ -1,6 +1,6 @@
 package com.readme.app.model.util;
 
-public class Validation {
+public final class Validation {
     private Validation() {
     }
 
@@ -21,7 +21,10 @@ public class Validation {
     }
 
     public static boolean isTotalPagesValid(int totalPages){
-        return totalPages > 10 && totalPages < 99999;
+        return totalPages > 0 && totalPages < 99999;
     }
 
+    public static boolean isActualPageValid(Integer actualPage, Integer totalPages) {
+        return actualPage >= 0 && actualPage <= totalPages;
+    }
 }

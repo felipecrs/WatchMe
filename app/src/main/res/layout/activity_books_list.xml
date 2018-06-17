@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".control.BooksListActivity">
 
-    <include layout="@layout/toolbar"></include>
+    <include layout="@layout/toolbar_common"></include>
 
     <ListView
         android:id="@+id/list"

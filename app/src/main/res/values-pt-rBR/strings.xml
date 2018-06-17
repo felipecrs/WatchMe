@@ -3,13 +3,11 @@
     <string name="title_activity_login">Entrar</string>
     <string name="prompt_email">E-mail</string>
     <string name="prompt_password">Senha</string>
-    <string name="action_sign_in">Entrar ou cadastrar</string>
+    <string name="action_sign_in">Entrar</string>
     <string name="action_sign_in_short">Entrar</string>
-    <string name="error_invalid_email">Endereço de e-mail inválido</string>
+    <string name="error_email_invalid">Endereço de e-mail inválido</string>
     <string name="error_invalid_password">Senha muito curta</string>
-    <string name="error_incorrect_password">Senha incorreta</string>
     <string name="error_field_required">Campo necessário</string>
-    <string name="permission_rationale">Permissão de contatos é necessário para mostrar sugestões de e-mail.</string>
     <string name="title_activity_main">Biblioteca</string>
     <string name="book_edit_txtTitle">Título</string>
     <string name="book_edit_txtAuthor">Autor</string>
@@ -21,7 +19,7 @@
     <string name="error_title_invalid">Título inválido</string>
     <string name="error_invalid_pages_quantity">Número total de páginas inválido</string>
     <string name="user_edit_txtEmail">E-mail</string>
-    <string name="user_edit_txtName">Nome</string>
+    <string name="user_edit_txtName">Nome (opcional)</string>
     <string name="book_edit_actionDelete">Excluir</string>
     <string name="pref_edit_profile">Editar perfil</string>
     <string name="pref_edit_profile_summary">Edita seu perfil</string>
@@ -36,7 +34,7 @@
     <string name="title_activity_user_edit">Editar usuário</string>
     <string name="error_invalid_name">Nome inválido</string>
     <string name="error_email_already_exist">E-mail já utilizado</string>
-    <string name="message_user_updated">Conta atualizada</string>
+    <string name="message_user_updated">Perfil atualizado</string>
     <string name="error_wrong_password">Senha incorreta</string>
     <string name="title_activity_book_add">Adicionar livro</string>
     <string name="pref_category_account">Conta</string>
@@ -62,4 +60,11 @@
     <string name="title_activity_books_list">Lista de livros</string>
     <string name="search_books_hint">Procurar livros</string>
     <string name="search_title">Procurar livros</string>
+    <string name="user_edit_txtDefaultId">não cadastrado</string>
+    <string name="cover">Capa</string>
+    <string name="message_permission_denied">Permissão negada</string>
+    <string name="message_ask_permission">Precisa de permissão</string>
+    <string name="action_sign_up">Cadastrar</string>
+    <string name="error_email_user_not_found">E-mail não encontrado</string>
+    <string name="user_edit_password_text">Senha</string>
 </resources>

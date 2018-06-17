@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/settings_container">
 
-    <include layout="@layout/toolbar" ></include>
+    <include layout="@layout/toolbar_common" ></include>
 
     <ListView
         android:id="@android:id/list"

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".control.UsersListActivity">
 
-    <include layout="@layout/toolbar"></include>
+    <include layout="@layout/toolbar_common"></include>
 
     <ListView
         android:id="@+id/list"
