@@ -117,7 +117,7 @@ public class BookDAO {
 
     private Cursor query(String selection, String[] selectionArgs) {
 
-        Cursor cursor = databaseHelper.getReadableDatabase().query(DatabaseHelper.Books.TABLE, DatabaseHelper.Books.COLUMNS, selection, selectionArgs, null, null, null );
+        Cursor cursor = databaseHelper.getReadableDatabase().query(DatabaseHelper.Books.TABLE, DatabaseHelper.Books.COLUMNS, selection, selectionArgs, null, null, DatabaseHelper.Books.TITLE+" ASC");
 
         if (cursor == null) {
             return null;
