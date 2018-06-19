@@ -21,7 +21,6 @@ import com.readme.app.model.util.Validation;
 public class UserEditActivity extends AppCompatActivity {
 
     private EditText nameEdit, emailEdit, passwordEdit;
-    private TextView idText;
 
     private SessionManager sessionManager;
     private UserDAO userDAO;
@@ -39,7 +38,6 @@ public class UserEditActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        idText = findViewById(R.id.user_edit_id);
         nameEdit = findViewById(R.id.user_edit_name);
         emailEdit = findViewById(R.id.user_edit_email);
         passwordEdit = findViewById(R.id.user_edit_password);
@@ -176,7 +174,6 @@ public class UserEditActivity extends AppCompatActivity {
     }
 
     private void loadFields() {
-        idText.setText(userToEdit.getId().toString());
         nameEdit.setText(userToEdit.getName());
         emailEdit.setText(userToEdit.getEmail());
         passwordEdit.setText(userToEdit.getPassword());
