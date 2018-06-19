@@ -67,4 +67,10 @@
     <string name="action_sign_up">Cadastrar</string>
     <string name="error_email_user_not_found">E-mail não encontrado</string>
     <string name="user_edit_password_text">Senha</string>
+    <string name="dialog_button_confirm">Confirmar</string>
+    <string name="dialog_button_cancel">Cancelar</string>
+    <string name="confirm_remove_user_title">Confirmação de exclusão</string>
+    <string name="confirm_remove_user_description">Tem certeza que deseja excluir seu perfil? Seus livros também serão excluídos</string>
+    <string name="dialog_confirm_password_title">Confirmação de senha</string>
+    <string name="dialog_confirm_password_description">Confirme sua senha para continuar</string>
 </resources>

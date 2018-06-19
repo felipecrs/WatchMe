@@ -87,5 +87,11 @@
     <string name="action_sign_up">Register</string>
     <string name="error_email_user_not_found">Email not found</string>
     <string name="user_edit_password_text">Password</string>
+    <string name="dialog_button_confirm">Confirm</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="confirm_remove_user_title">Delete confirmation</string>
+    <string name="confirm_remove_user_description">Are you sure you want to delete your profile? Your books will also be deleted</string>
+    <string name="dialog_confirm_password_title">Password confirmation</string>
+    <string name="dialog_confirm_password_description">Confirm your password to proceed</string>
 
 </resources>
