@@ -1,4 +1,4 @@
-package com.readme.app.model.util;
+package com.readme.app.util;
 
 import android.app.AlertDialog;
 import android.content.Context;

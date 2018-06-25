@@ -1,29 +1,30 @@
-package com.readme.app.control;
+package com.readme.app.ui;
 
+import com.readme.app.viewmodel.BookListViewModel;
 import com.readme.app.R;
-import com.readme.app.model.Book;
-import com.readme.app.model.adapter.BookAdapter;
-import com.readme.app.model.dao.BookDAO;
+import com.readme.app.ui.adapter.BookListAdapter;
 
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.SearchView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.appcompat.widget.SearchView;
 import android.view.Menu;
 import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.TextView;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,13 +32,14 @@ public class MainActivity extends AppCompatActivity
     public static final int UPDATE_USER_DETAILS_REQUEST = 1;
     public static final int UPDATE_BOOK_LIST_REQUEST = 2;
 
-    TextView txtName;
-    TextView txtEmail;
-    ListView listViewBooks;
-    BookDAO bookDAO;
-    BookAdapter bookAdapter;
+    private TextView txtName;
+    private TextView txtEmail;
 
-    SessionManager sessionManager;
+    private RecyclerView mRecyclerView;
+    private BookListAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
+    private BookListViewModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity
 
         FloatingActionButton fab = findViewById(R.id.fab_add_book);
         fab.setOnClickListener(view -> {
-            startBookEditActivity(null);
+            startBookEditActivity(-1);
         });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -65,19 +67,20 @@ public class MainActivity extends AppCompatActivity
 
         txtName = headerView.findViewById(R.id.nav_header_main_txtName);
         txtEmail = headerView.findViewById(R.id.nav_header_main_txtEmail);
-        listViewBooks = findViewById(R.id.main_listViewBooks);
 
-        sessionManager = SessionManager.getInstance(this);
+        mAdapter = new BookListAdapter(this);
+        mAdapter.setOnBookClickListener(book -> startBookEditActivity(book.getId()));
 
-        bookDAO = new BookDAO(this);
-        bookAdapter = new BookAdapter(this, bookDAO.listByUser(sessionManager.getUserId()));
-        listViewBooks.setAdapter(bookAdapter);
-        listViewBooks.setOnItemClickListener((parent, view, position, id) -> {
-            Book book = (Book) parent.getItemAtPosition(position);
-            startBookEditActivity(book.getId());
+        mRecyclerView = findViewById(R.id.main_listViewBooks);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        model = ViewModelProviders.of(this).get(BookListViewModel.class);
+        model.init();
+        model.getAllBooks().observe(this, books -> {
+            mAdapter.setBooks(books);
         });
-        updateBookList();
-        updateUserDetails();
     }
 
     @Override
@@ -105,29 +108,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case UPDATE_USER_DETAILS_REQUEST:
-                switch (resultCode) {
-                    case RESULT_OK:
-                        updateUserDetails();
-                        break;
-                    case RESULT_CANCELED:
-                        break;
-                }
-            case UPDATE_BOOK_LIST_REQUEST:
-                switch (resultCode) {
-                    case RESULT_OK:
-                        updateBookList();
-                        break;
-                    case RESULT_CANCELED:
-                        break;
-                }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -142,8 +122,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivityForResult(intent, UPDATE_USER_DETAILS_REQUEST);
+                /*Intent intent = new Intent(this, SettingsActivity.class);
+                startActivityForResult(intent, UPDATE_USER_DETAILS_REQUEST);*/
                 break;
         }
 
@@ -151,23 +131,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    private void updateUserDetails() {
-        txtName.setText(sessionManager.getUserName());
-        txtEmail.setText(sessionManager.getUserEmail());
-    }
-
-    private void updateBookList() {
-        List<Book> books = bookDAO.listByUser(sessionManager.getUserId());
-        bookAdapter.refreshBooks(books);
-        bookDAO.close();
-    }
-
-    private void updateBookList(List<Book> books) {
-        bookAdapter.refreshBooks(books);
-        bookDAO.close();
-    }
-
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -182,18 +145,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showResults (String query) {
-        List<Book> books = bookDAO.getBookMatches(sessionManager.getUserId(), query);
-        updateBookList(books);
+
     }
 
-    private void startBookEditActivity(Integer id) {
+    private void startBookEditActivity(final int id) {
         Intent intent = new Intent(MainActivity.this, BookEditActivity.class);
-        intent.putExtra("user_id", sessionManager.getUserId());
-        if (id != null) {
-            // Start BookEditActivity for editing
-            intent.putExtra("book_id", id);
-        }
-        startActivityForResult(intent, UPDATE_BOOK_LIST_REQUEST);
+        intent.putExtra(BookEditActivity.ID_KEY, id);
+        startActivity(intent);
     }
 
 }

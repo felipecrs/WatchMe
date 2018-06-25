@@ -1,4 +1,4 @@
-package com.readme.app.model.util;
+package com.readme.app.util;
 
 public final class Validation {
     private Validation() {

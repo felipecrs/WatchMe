@@ -2,39 +2,44 @@ package com.readme.app.model;
 
 import android.graphics.Bitmap;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import static com.readme.app.model.Book.TABLE_NAME;
+
+@Entity(tableName = TABLE_NAME)
 public class Book {
+    public static final String TABLE_NAME = "books";
+    public static final String ID = "id";
+    public static final String TITLE = "title";
+    public static final String AUTHOR = "author";
+    public static final String TOTAL_PAGES = "total_pages";
+    public static final String ACTUAL_PAGE = "actual_page";
+    public static final String COVER = "cover";
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = ID)
     private Integer id;
-    private Integer userId;
+
+    @ColumnInfo(name = TITLE)
+    @NonNull
     private String title;
+
+    @ColumnInfo(name = AUTHOR)
+    @NonNull
     private String author;
+
+    @ColumnInfo(name = TOTAL_PAGES)
+    @NonNull
     private Integer totalPages;
+
+    @ColumnInfo(name = ACTUAL_PAGE)
     private Integer actualPage;
-    private Bitmap image;
 
-    public Book(Integer id, Integer userId, String title, String author, Integer totalPages, Integer actualPage, Bitmap image) {
-        this.id = id;
-        this.userId = userId;
-        this.title = title;
-        this.author = author;
-        this.totalPages = totalPages;
-        this.actualPage = actualPage;
-        this.image = image;
-    }
-
-    public Book(Integer userId, String title, String author, Integer totalPages, Integer actualPage, Bitmap image) {
-        this.id = -1;
-        this.userId = userId;
-        this.title = title;
-        this.author = author;
-        this.totalPages = totalPages;
-        this.actualPage = actualPage;
-        this.image = image;
-    }
-
-    public Book(Integer userId) {
-        this.id = -1;
-        this.userId = userId;
-    }
+    @ColumnInfo(name = COVER)
+    private Bitmap cover;
 
     public Integer getId() {
         return id;
@@ -44,35 +49,30 @@ public class Book {
         this.id = id;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
+    @NonNull
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(@NonNull String title) {
         this.title = title;
     }
 
+    @NonNull
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(@NonNull String author) {
         this.author = author;
     }
 
+    @NonNull
     public Integer getTotalPages() {
         return totalPages;
     }
 
-    public void setTotalPages(Integer totalPages) {
+    public void setTotalPages(@NonNull Integer totalPages) {
         this.totalPages = totalPages;
     }
 
@@ -84,11 +84,11 @@ public class Book {
         this.actualPage = actualPage;
     }
 
-    public Bitmap getImage() {
-        return image;
+    public Bitmap getCover() {
+        return cover;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
+    public void setCover(Bitmap cover) {
+        this.cover = cover;
     }
 }

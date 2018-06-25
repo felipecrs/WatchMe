@@ -1,4 +1,4 @@
-package com.readme.app.model.util;
+package com.readme.app.util;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -9,27 +9,32 @@ import android.graphics.drawable.Drawable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
+import androidx.room.TypeConverter;
+
 public final class Converter {
 
     public static final int DEFAULT_BOOK_IMAGE_WIDTH = 128;
     public static final int DEFAULT_BOOK_IMAGE_HEIGHT = 256;
 
-    public static byte[] getBitmapAsByteArray(Bitmap image) {
+    @TypeConverter
+    public static byte[] bitmapToByteArray(Bitmap image) {
         if(image == null) { return null; }
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
         return outputStream.toByteArray();
     }
 
-    public static Bitmap getBitmapFromByteArray(byte[] image) {
+    @TypeConverter
+    public static Bitmap byteArrayToBitmap(byte[] image) {
         if(image == null) { return null; }
-        ByteArrayInputStream imageStream = new ByteArrayInputStream(image);
-        return BitmapFactory.decodeStream(imageStream);
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
-    public static Drawable getDrawableFromBitmap(Resources resources, Bitmap bitmap) {
-        return new BitmapDrawable(resources, bitmap);
+    public static Bitmap drawableToBitmap(Drawable image) {
+        return ((BitmapDrawable)image).getBitmap();
+
     }
+
 
     public static Bitmap decodeSampledBitmapFromFile(String filePath, int reqWidth, int reqHeight) {
 
