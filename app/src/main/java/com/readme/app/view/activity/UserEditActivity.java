@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.readme.app.R;
 import com.readme.app.model.entity.Email;
 import com.readme.app.model.entity.User;
@@ -40,7 +41,7 @@ public class UserEditActivity extends AppCompatActivity {
     private UserDao userDao;
 
     private User userToEdit;
-    private MutableLiveData<List<Email>> emailsToEdit;
+    private MutableLiveData<List<String>> emailAdressesToEdit = new MediatorLiveData<>();
     private boolean editing;
 
     @Override
@@ -58,42 +59,31 @@ public class UserEditActivity extends AppCompatActivity {
 
         nameEditText = findViewById(R.id.user_edit_name);
         passwordEditText = findViewById(R.id.user_edit_password);
-        emailSpinner = findViewById(R.id.user_spinner_email);
+
         ImageButton addEmailImageButton = findViewById(R.id.imageview_add_email);
         ImageButton removeEmailImageButton = findViewById(R.id.imageview_remove_email);
 
         // Receiving data from parent activity
         Integer userIdToEdit = getIntent().getIntExtra(getString(R.string.intent_extra_user_id), -1);
-        String userEmailToEdit = getIntent().getStringExtra("user_email");
-        String userPasswordToEdit = getIntent().getStringExtra("user_password");
+        String emailAdressFromIntent = getIntent().getStringExtra("user_email");
+        String passwordFromIntent = getIntent().getStringExtra("user_password");
 
         editing = userIdToEdit != -1;
 
-        ArrayAdapter<Email> emailAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item);
-        emailAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> emailAdressesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        emailAdressesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        emailsToEdit = new MediatorLiveData<>();
-        emailsToEdit.setValue(new ArrayList<>());
-
-        emailsToEdit.observe( this, emails -> {
-            emailAdapter.clear();
-            if(emails.size() <= 1) {
-                removeEmailImageButton.setEnabled(false);
-            } else {
-                removeEmailImageButton.setEnabled(true);
-            }
-            emailAdapter.addAll(emails);
-            //emailAdapter.notifyDataSetChanged();
-        });
-        emailSpinner.setAdapter(emailAdapter);
+        emailSpinner = findViewById(R.id.user_spinner_email);
+        emailSpinner.setAdapter(emailAdressesAdapter);
 
         addEmailImageButton.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("New email");
 
-            final EditText input = new EditText(this);
-            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-            builder.setView(input);
+            EditText emailAdressEditText = new EditText(this);
+            emailAdressEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+
+            builder.setView(emailAdressEditText);
 
             builder.setPositiveButton("Add", (dialog, which) -> {
 
@@ -104,48 +94,61 @@ public class UserEditActivity extends AppCompatActivity {
             dialog.show();
 
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v1 -> {
-                String emailAddress = input.getText().toString();
+                String emailAddress = emailAdressEditText.getText().toString();
                 if (Validator.isEmailValid(emailAddress)) {
-                    Email newEmail = new Email(emailAddress, userToEdit.getId());
-                    Email emailFound = userDao.getEmail(emailAddress);
-                    if ((emailFound == null || emailFound.getUserId().equals(userToEdit.getId())) && !emailsToEdit.getValue().contains(newEmail)) {
-                        addToEmailsToEdit(newEmail);
+                    Email emailFound = userDao.getEmailByAddress(emailAddress);
+                    if ((emailFound == null || emailFound.getUserId().equals(userToEdit.getId())) && !emailAdressesToEdit.getValue().contains(emailAddress)) {
+                        addToEmailsToEdit(emailAddress);
                         dialog.dismiss();
                     } else {
-                        input.setError(getString(R.string.error_email_already_exist));
+                        emailAdressEditText.setError(getString(R.string.error_email_already_exist));
                     }
                 } else {
-                    input.setError(getString(R.string.error_email_invalid));
-                    input.requestFocus();
+                    emailAdressEditText.setError(getString(R.string.error_email_invalid));
+                    emailAdressEditText.requestFocus();
                 }
             });
         });
         removeEmailImageButton.setOnClickListener(v -> {
-            removeFromEmailsToEdit((Email)emailSpinner.getSelectedItem());
+            removeFromEmailsToEdit((String)emailSpinner.getSelectedItem());
         });
 
         // Editing
         if (editing) {
             userToEdit = userDao.getById(userIdToEdit);
-            List<Email> emailsToEditList = new ArrayList<>(userDao.getEmailsByUserId(userToEdit.getId()));
-            for (int i = 0; i < emailsToEditList.size(); i++) {
-                Email email = emailsToEditList.get(i);
-                if(email.getAddress().equals(userToEdit.getEmailAddress())) {
-                    emailsToEditList.remove(email);
-                    emailsToEditList.add(0,email);
+            List<String> emailAddresses = userDao.getEmailAdressesByUserId(userToEdit.getId());
+            // Setting the primary email as the first on list
+            for (String emailAddress : emailAddresses) {
+                if(emailAddress.equals(userToEdit.getEmailAddress())) {
+                    emailAddresses.remove(emailAddress);
+                    emailAddresses.add(0, emailAddress);
+                    break;
                 }
             }
-            emailsToEdit.setValue(emailsToEditList);
+            emailAdressesToEdit.setValue(emailAddresses);
         }
         // Adding
         else {
             userToEdit = new User();
-            userToEdit.setEmailAddress(userEmailToEdit);
-            userToEdit.setPassword(userPasswordToEdit);
-            if(Validator.isEmailValid(userEmailToEdit)) addToEmailsToEdit(new Email(userEmailToEdit, userIdToEdit));
+            userToEdit.setEmailAddress(emailAdressFromIntent);
+            userToEdit.setPassword(passwordFromIntent);
+
+            emailAdressesToEdit.setValue(new ArrayList<>());
+            if(Validator.isEmailValid(emailAdressFromIntent)) {
+                addToEmailsToEdit(emailAdressFromIntent);
+            }
+
             actionBar.setTitle(R.string.title_activity_user_add);
         }
-        loadFields();
+
+        emailAdressesToEdit.observe( this, emails -> {
+            emailAdressesAdapter.clear();
+            removeEmailImageButton.setEnabled(emails.size() > 1);
+            emailAdressesAdapter.addAll(emails);
+        });
+
+        nameEditText.setText(userToEdit.getName());
+        passwordEditText.setText(userToEdit.getPassword());
     }
 
     @Override
@@ -236,12 +239,12 @@ public class UserEditActivity extends AppCompatActivity {
         }
     }
 
-    private void save (String name, String email, String password) {
+    private void save (String name, String emailAdress, String password) {
         userToEdit.setName(name);
-        userToEdit.setEmailAddress(email);
+        userToEdit.setEmailAddress(emailAdress);
         userToEdit.setPassword(password);
 
-        userDao.saveUserWithEmails(userToEdit, emailsToEdit.getValue());
+        userDao.saveUserWithEmails(userToEdit, emailAdressesToEdit.getValue());
         // Editing
         if (editing) {
             Message.show(this, getString(R.string.message_user_updated));
@@ -264,19 +267,14 @@ public class UserEditActivity extends AppCompatActivity {
                 }, null).show();
     }
 
-    private void loadFields () {
-        nameEditText.setText(userToEdit.getName());
-        passwordEditText.setText(userToEdit.getPassword());
+    private void addToEmailsToEdit(String emailAdress) {
+        emailAdressesToEdit.getValue().add(emailAdress);
+        emailAdressesToEdit.setValue(emailAdressesToEdit.getValue());
     }
 
-    private void addToEmailsToEdit(Email email) {
-        emailsToEdit.getValue().add(email);
-        emailsToEdit.setValue(emailsToEdit.getValue());
-    }
-
-    private void removeFromEmailsToEdit(Email email) {
-        emailsToEdit.getValue().remove(email);
-        emailsToEdit.setValue(emailsToEdit.getValue());
+    private void removeFromEmailsToEdit(String emailAdress) {
+        emailAdressesToEdit.getValue().remove(emailAdress);
+        emailAdressesToEdit.setValue(emailAdressesToEdit.getValue());
     }
 
 }

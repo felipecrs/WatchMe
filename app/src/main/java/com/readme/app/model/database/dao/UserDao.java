@@ -2,7 +2,9 @@ package com.readme.app.model.database.dao;
 
 import com.readme.app.model.entity.Email;
 import com.readme.app.model.entity.User;
+import com.readme.app.model.entity.UserWithEmails;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -24,7 +26,7 @@ public abstract class UserDao {
     public abstract int delete(User user);
 
     @Query("DELETE FROM "+Email.TABLE+" WHERE "+Email.USER_ID+" = :userId")
-    abstract void deleteAllEmailsByUser(Integer userId);
+    abstract void deleteAllEmailsByUserId(Integer userId);
 
     @Insert
     abstract void insertEmails(List<Email> emails);
@@ -35,12 +37,15 @@ public abstract class UserDao {
     @Query("SELECT * FROM "+User.TABLE+" WHERE "+User.ID+" = :id")
     public abstract User getById(Integer id);
 
-    @Query("SELECT * FROM "+Email.TABLE+" WHERE "+Email.ADDRESS+" = :address")
-    public abstract Email getEmail(String address);
+    @Query("SELECT * FROM "+User.TABLE+" WHERE "+User.ID+" = :id")
+    public abstract UserWithEmails getUserWithEmailsById(Integer id);
 
-    @Query("SELECT * FROM "+Email.TABLE+" WHERE "+Email.USER_ID+" = :userId")
+    @Query("SELECT * FROM "+Email.TABLE+" WHERE "+Email.ADDRESS+" = :address")
+    public abstract Email getEmailByAddress(String address);
+
+    @Query("SELECT "+Email.ADDRESS+" FROM "+Email.TABLE+" WHERE "+Email.USER_ID+" = :userId")
     @NonNull
-    public abstract List<Email> getEmailsByUserId(Integer userId);
+    public abstract List<String> getEmailAdressesByUserId(Integer userId);
 
     @Query("SELECT * FROM "+User.TABLE+" WHERE "+User.ID+" = :id")
     public abstract LiveData<User> getLiveById(Integer id);
@@ -49,15 +54,30 @@ public abstract class UserDao {
     public abstract User getByEmail(String email);
 
     @Transaction
-    void saveEmails(Integer userId, List<Email> emails) {
-        deleteAllEmailsByUser(userId);
+    void saveEmails(Integer userId, List<String> emailAdresses) {
+        List<Email> emails = new ArrayList<>();
+        emailAdresses.forEach(emailAdress -> emails.add(new Email(emailAdress, userId)));
+        emails.sort((o1, o2) -> o1.getAddress().compareToIgnoreCase(o2.getAddress()));
+        deleteAllEmailsByUserId(userId);
         insertEmails(emails);
     }
 
     @Transaction
-    public void saveUserWithEmails(User user, List<Email> emails) {
+    public void saveUserWithEmails(User user, List<String> emailAdresses) {
         Integer userId = (int) save(user);
-        emails.forEach(email -> email.setUserId(userId));
-        saveEmails(user.getId(),emails);
+        saveEmails(userId,emailAdresses);
+    }
+
+    @Transaction
+    public void saveUserWithEmails(UserWithEmails userWithEmails) {
+        Integer userId = (int) save(userWithEmails.getUser());
+        for (String emailAdress : userWithEmails.getEmailAdresses()) {
+            if(emailAdress.equals(userWithEmails.getUser().getEmailAddress())){
+                userWithEmails.getEmailAdresses().remove(emailAdress);
+                userWithEmails.getEmailAdresses().add(0, emailAdress);
+                break;
+            }
+        }
+        saveEmails(userId,userWithEmails.getEmailAdresses());
     }
 }

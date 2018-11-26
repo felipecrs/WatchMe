@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.readme.app.R;
 
 import androidx.appcompat.app.AlertDialog;
