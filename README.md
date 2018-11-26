@@ -1,6 +1,6 @@
-# ReadMe
+# WatchMe
 
-## Um aplicativo para gerenciar todos os seus livros, filmes e séries
+## Um aplicativo para gerenciar todos os seus livros, séries e filmes.
 
 ###### Projeto escolar:
 
