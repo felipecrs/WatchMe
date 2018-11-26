@@ -7,7 +7,7 @@
 Disciplina de Engenharia de Software II do Inatel - EC 206 
 
 Monitor da disciplina: 
-- Felipe Martins Vitor 
+- Felipe Martins Vítor 
 
 Integrantes da equipe de desenvolvimento e documentação:
 
