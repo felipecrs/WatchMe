@@ -40,7 +40,7 @@
     <string name="pref_category_account">Conta</string>
     <string name="pref_list_users">Listar usuários</string>
     <string name="pref_list_users_summary">Lista todos os usuários no banco de dados</string>
-    <string name="title_activity_users_list">Lista de usuários</string>
+    <string name="title_activity_user_list">Lista de usuários</string>
     <string name="sample_bookAuthor">Exemplo de Nome de Autor</string>
     <string name="title_activity_user_add">Cadastro de usuário</string>
     <string name="message_book_edited">Livro atualizado</string>

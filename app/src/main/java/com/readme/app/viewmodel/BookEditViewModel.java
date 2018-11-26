@@ -2,20 +2,20 @@ package com.readme.app.viewmodel;
 
 import android.app.Application;
 
-import com.readme.app.data.BookRepository;
-import com.readme.app.model.Book;
+import com.readme.app.model.entity.Book;
+import com.readme.app.model.database.AppDatabase;
+import com.readme.app.model.database.dao.BookDao;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
 public class BookEditViewModel extends AndroidViewModel {
 
-    private BookRepository bookRepository;
+    private BookDao bookDao;
 
     private Book newBook;
 
-    private LiveData<Book> originalBook;
+    private Book originalBook;
 
     private boolean editing;
 
@@ -23,7 +23,7 @@ public class BookEditViewModel extends AndroidViewModel {
 
     public BookEditViewModel(@NonNull Application application) {
         super(application);
-        bookRepository = BookRepository.getInstance(application);
+        bookDao = AppDatabase.getInstance(application).getBookDao();
         initialized = false;
     }
 
@@ -32,7 +32,7 @@ public class BookEditViewModel extends AndroidViewModel {
             editing = id != -1;
 
             if(editing) {
-                originalBook = bookRepository.getBook(id);
+                originalBook = bookDao.getById(id);
             } else {
 
             }
@@ -43,11 +43,11 @@ public class BookEditViewModel extends AndroidViewModel {
 
     public void save() {
 
-        bookRepository.save(newBook);
+        bookDao.save(newBook);
     }
 
     public void delete() {
-        bookRepository.delete(newBook);
+        bookDao.delete(newBook);
     }
 
     public boolean isEditing() {
@@ -58,7 +58,7 @@ public class BookEditViewModel extends AndroidViewModel {
         return newBook;
     }
 
-    public LiveData<Book> getOriginalBook() {
+    public Book getOriginalBook() {
         return originalBook;
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">ReadME</string>
+    <string name="app_name" translatable="false">WatchMe</string>
 
     <!-- Strings related to login -->
     <string name="title_activity_login">Login</string>
@@ -28,13 +28,20 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Profile settings -->
+    <string name="pref_category_account">Account</string>
     <string name="pref_header_profile">Profile</string>
     <string name="pref_edit_profile">Edit profile</string>
     <string name="pref_edit_profile_summary">Edit your profile</string>
     <string name="pref_logout">Logout</string>
-    <string name="pref_edit_profile_button_key" translatable="false">pref_btnEditProfile</string>
-    <string name="pref_logout_button_key" translatable="false">pref_btnLogout</string>
+    <string name="pref_edit_profile_button_key" translatable="false">edit_profile</string>
+    <string name="pref_logout_button_key" translatable="false">logout</string>
     <string name="user_edit_txtDefaultId">not registered</string>
+
+    <!-- Strings related to Database settings -->
+    <string name="pref_category_database">Database</string>
+    <string name="preference_key_database_manager" translatable="false">database_manager</string>
+    <string name="preference_title_database_manager">Database manager</string>
+    <string name="preference_summary_database_manager">Opens database manager</string>
 
     <!-- Error strings -->
     <string name="error_title_invalid">Title invalid</string>
@@ -59,12 +66,9 @@
     <string name="error_wrong_password">Incorrect password</string>
     <string name="title_activity_book_add">Add book</string>
     <string name="book_id_extra_key" translatable="false">book_id</string>
-    <string name="pref_category_account">Account</string>
-    <string name="pref_list_users">List users</string>
-    <string name="pref_list_users_button_key" translatable="false">pref_btnListUsers</string>
-    <string name="pref_list_users_summary">List all users on database</string>
-    <string name="title_activity_users_list">Users list</string>
-    <string name="sample_email">email@domain.com</string>
+
+    <string name="title_activity_user_list">Users list</string>
+    <string name="sample_email">emailAddress@domain.com</string>
     <string name="sample_bookTitle">Sample Title Book</string>
     <string name="sample_bookAuthor">" Sample Author Name"</string>
     <string name="title_activity_user_add">User register</string>
@@ -77,10 +81,7 @@
     <string name="search_title">Search books</string>
     <string name="search_books_hint">Search books</string>
     <string name="title_activity_books_list">Books</string>
-    <string name="pref_category_database">Database</string>
-    <string name="pref_list_books">List books</string>
-    <string name="pref_list_books_summary">List all books on database</string>
-    <string name="pref_list_books_button_key" translatable="false">pref_btnListBooks</string>
+
     <string name="cover">Cover</string>
     <string name="message_permission_denied">Permission denied</string>
     <string name="message_ask_permission">Permission needed</string>
@@ -93,5 +94,24 @@
     <string name="confirm_remove_user_description">Are you sure you want to delete your profile? Your books will also be deleted</string>
     <string name="dialog_confirm_password_title">Password confirmation</string>
     <string name="dialog_confirm_password_description">Confirm your password to proceed</string>
+    <string name="intent_extra_user_id" translatable="false">user_id</string>
+    <string name="title_activity_book_list">BookListActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="sample_movieDirector">Sample Movie Director</string>
+    <string name="sample_movieTitle">Sample Movie Title</string>
+    <string name="title_activity_movie_add">Add movie</string>
+    <string name="message_movie_edited">Movie updated</string>
+    <string name="message_movie_added">Movie added</string>
+    <string name="message_movie_deleted">Movie deleted</string>
+    <string name="title_activity_movie_edit">Edit movie</string>
+    <string name="message_no_changes">No changes detected</string>
+    <string name="sample_series_title">Sample Series Title</string>
+    <string name="edittext_hint_series_title">Series title</string>
+    <string name="title_activity_series_add">Add series</string>
+    <string name="message_series_deleted">Series deleted</string>
+    <string name="title_activity_series_edit">Edit series</string>
 
 </resources>

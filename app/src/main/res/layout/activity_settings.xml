@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<fragment
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_settings"
+    android:name="com.readme.app.view.activity.ui.settings.SettingsFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/settings_container">
-
-    <include layout="@layout/toolbar_common" ></include>
-
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="2"></ListView>
-
-</LinearLayout>
+    android:layout_height="match_parent"/>
