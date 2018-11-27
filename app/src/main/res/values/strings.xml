@@ -74,7 +74,7 @@
     <string name="title_activity_user_add">User register</string>
     <string name="message_book_edited">Book updated</string>
     <string name="sample_bookReadPages">Read 1/100</string>
-    <string name="list_book_txtReadPages">Read</string>
+    <string name="list_book_txtReadPages">Read %1$d/%2$d</string>
     <string name="list_book_not_started">Not started to read</string>
     <string name="action_settings">Settings</string>
     <string name="message_user_deleted">User removed</string>
@@ -113,5 +113,7 @@
     <string name="title_activity_series_add">Add series</string>
     <string name="message_series_deleted">Series deleted</string>
     <string name="title_activity_series_edit">Edit series</string>
+    <string name="message_email_required">Email required</string>
+    <string name="list_book_txtReadPagesNotStarted">Not started</string>
 
 </resources>

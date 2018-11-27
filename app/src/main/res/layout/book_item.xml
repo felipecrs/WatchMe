@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sample_bookTitle"
                 android:gravity="start|top"
-                android:padding="@dimen/activity_horizontal_margin"
+                android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             <TextView

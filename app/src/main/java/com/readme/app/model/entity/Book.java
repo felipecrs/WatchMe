@@ -6,12 +6,20 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 import static com.readme.app.model.entity.Book.TABLE;
+import static com.readme.app.model.entity.Book.USER_ID;
 
-@Entity(tableName = TABLE)
+@Entity(tableName = TABLE,
+        foreignKeys = {
+                @ForeignKey(entity = User.class,
+                        parentColumns = User.ID,
+                        childColumns = USER_ID,
+                        onDelete = CASCADE)},
+        indices = @Index(value = USER_ID))
 public class Book {
     public static final String TABLE = "book";
     public static final String ID = "id";
@@ -26,9 +34,8 @@ public class Book {
     @ColumnInfo(name = ID)
     private Integer id = null;
 
-    @ForeignKey(entity = User.class, parentColumns = User.ID, childColumns = USER_ID, onDelete = CASCADE)
-    @NonNull
     @ColumnInfo(name = USER_ID)
+    @NonNull
     private Integer userId = null;
 
     @ColumnInfo(name = TITLE)

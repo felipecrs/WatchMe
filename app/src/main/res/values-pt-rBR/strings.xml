@@ -38,14 +38,13 @@
     <string name="error_wrong_password">Senha incorreta</string>
     <string name="title_activity_book_add">Adicionar livro</string>
     <string name="pref_category_account">Conta</string>
-    <string name="pref_list_users">Listar usuários</string>
     <string name="pref_list_users_summary">Lista todos os usuários no banco de dados</string>
     <string name="title_activity_user_list">Lista de usuários</string>
     <string name="sample_bookAuthor">Exemplo de Nome de Autor</string>
     <string name="title_activity_user_add">Cadastro de usuário</string>
     <string name="message_book_edited">Livro atualizado</string>
     <string name="sample_bookReadPages">Lista 1/100</string>
-    <string name="list_book_txtReadPages">Lido</string>
+    <string name="list_book_txtReadPages">Lido %1$d/%2$d</string>
     <string name="list_book_not_started">Não começou a ler</string>
     <string name="message_user_deleted">Usuario removido</string>
     <string name="sample_bookTitle">Exemplo de Nome de Livro</string>
@@ -73,4 +72,17 @@
     <string name="confirm_remove_user_description">Tem certeza que deseja excluir seu perfil? Seus livros também serão excluídos</string>
     <string name="dialog_confirm_password_title">Confirmação de senha</string>
     <string name="dialog_confirm_password_description">Confirme sua senha para continuar</string>
+    <string name="list_book_txtReadPagesNotStarted">Não iniciado</string>
+    <string name="message_email_required">Email obrigatório</string>
+    <string name="title_activity_series_edit">Editar série</string>
+    <string name="message_series_deleted">Série removida</string>
+    <string name="title_activity_series_add">Adicionar série</string>
+    <string name="edittext_hint_series_title">Título da série</string>
+    <string name="message_no_changes">Nenhuma mudança detectada</string>
+    <string name="title_activity_movie_edit">Editar filme</string>
+    <string name="message_movie_deleted">Filme removido</string>
+    <string name="message_movie_added">Filme adicionado</string>
+    <string name="message_movie_edited">Filme atualizado</string>
+    <string name="title_activity_movie_add">Adicionar filme</string>
+    <string name="preference_summary_database_manager">Abre o gerenciador de banco de dados</string>
 </resources>

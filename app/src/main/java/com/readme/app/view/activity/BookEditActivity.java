@@ -65,12 +65,12 @@ public class BookEditActivity extends AppCompatActivity {
 
         if(viewModel.isEditing()) {
             // Editing a book
-            Book book = viewModel.getOriginalBook();
+            Book book = viewModel.getOldItem();
             titleEditText.setText(book.getTitle());
             authorEditText.setText(book.getAuthor());
             totalPagesEditText.setText(book.getPages().toString());
             if(book.getCurrentPage() != null) {
-                actualPageEditText.setText(book.getCurrentPage());
+                actualPageEditText.setText(book.getCurrentPage().toString());
             }
             if(book.getCover() != null) {
                 coverImageView.setImageBitmap(book.getCover());
@@ -128,7 +128,7 @@ public class BookEditActivity extends AppCompatActivity {
                     Bitmap selectedImage = Converter.decodeSampledBitmapFromFile(filePath, Converter.DEFAULT_BOOK_IMAGE_WIDTH, Converter.DEFAULT_BOOK_IMAGE_HEIGHT);
 
                     coverImageView.setImageBitmap(selectedImage);
-                    viewModel.getNewBook().setCover(selectedImage);
+                    viewModel.getNewItem().setCover(selectedImage);
                 }
         }
     }
@@ -217,15 +217,15 @@ public class BookEditActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             if(viewModel.isEditing()) {
-                viewModel.getNewBook().setId(viewModel.getOriginalBook().getId());
-                viewModel.getNewBook().setUserId(viewModel.getOriginalBook().getUserId());
+                viewModel.getNewItem().setId(viewModel.getOldItem().getId());
+                viewModel.getNewItem().setUserId(viewModel.getOldItem().getUserId());
             } else {
-                viewModel.getNewBook().setUserId(sessionManager.getUserId());
+                viewModel.getNewItem().setUserId(sessionManager.getUserId());
             }
-            viewModel.getNewBook().setTitle(title);
-            viewModel.getNewBook().setAuthor(author);
-            viewModel.getNewBook().setPages(totalPages);
-            viewModel.getNewBook().setCurrentPage(actualPage);
+            viewModel.getNewItem().setTitle(title);
+            viewModel.getNewItem().setAuthor(author);
+            viewModel.getNewItem().setPages(totalPages);
+            viewModel.getNewItem().setCurrentPage(actualPage);
             // viewModel.getNewItem().setCover() is called when image was picked to preserve original Bitmap
             //viewModel.getNewItem().setCover(Converter.drawableToBitmap(coverImageView.getDrawable()));
 

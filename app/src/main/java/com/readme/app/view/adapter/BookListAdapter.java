@@ -21,12 +21,14 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
         private final TextView txtTitle;
         private final TextView txtAuthor;
         private final ImageView coverImageView;
+        private final TextView txtReadPages;
 
         private ViewHolder(View itemView) {
             super(itemView);
             txtTitle = itemView.findViewById(R.id.textview_movie_title);
             txtAuthor = itemView.findViewById(R.id.list);
             coverImageView = itemView.findViewById(R.id.imageview_series_cover);
+            txtReadPages = itemView.findViewById(R.id.list_book_txtReadPages);
         }
     }
 
@@ -53,6 +55,11 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
             Book current = mBooks.get(position);
             holder.txtTitle.setText(current.getTitle());
             holder.txtAuthor.setText(current.getAuthor());
+            if(current.getCurrentPage() == null || current.getCurrentPage() == 0) {
+                holder.txtReadPages.setText(mInflater.getContext().getString(R.string.list_book_txtReadPagesNotStarted));
+            } else {
+                holder.txtReadPages.setText(mInflater.getContext().getString(R.string.list_book_txtReadPages, current.getCurrentPage(), current.getPages()));
+            }
             if(current.getCover() != null) {
                 holder.coverImageView.setImageBitmap(current.getCover());
             }

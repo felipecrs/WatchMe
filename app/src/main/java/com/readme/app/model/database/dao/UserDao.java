@@ -28,8 +28,11 @@ public abstract class UserDao {
     @Query("DELETE FROM "+Email.TABLE+" WHERE "+Email.USER_ID+" = :userId")
     abstract void deleteAllEmailsByUserId(Integer userId);
 
-    @Insert
+    @Insert(onConflict = REPLACE)
     abstract void insertEmails(List<Email> emails);
+
+    @Insert
+    abstract void insertEmail(Email email);
 
     @Query("SELECT * FROM "+User.TABLE)
     public abstract LiveData<List<User>> getAll();
@@ -37,6 +40,7 @@ public abstract class UserDao {
     @Query("SELECT * FROM "+User.TABLE+" WHERE "+User.ID+" = :id")
     public abstract User getById(Integer id);
 
+    @Transaction
     @Query("SELECT * FROM "+User.TABLE+" WHERE "+User.ID+" = :id")
     public abstract UserWithEmails getUserWithEmailsById(Integer id);
 

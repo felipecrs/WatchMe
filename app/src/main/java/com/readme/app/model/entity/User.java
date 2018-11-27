@@ -4,9 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import static androidx.room.ForeignKey.CASCADE;
 import static com.readme.app.model.entity.User.TABLE;
 
 @Entity(tableName = TABLE)
@@ -22,7 +22,6 @@ public class User {
     @ColumnInfo(name = ID)
     private Integer id = null;
 
-    @ForeignKey(entity = Email.class, parentColumns = Email.ADDRESS, childColumns = EMAIL_ADDRESS, onDelete = CASCADE, onUpdate = CASCADE)
     @NonNull
     @ColumnInfo(name = EMAIL_ADDRESS)
     private String emailAddress;

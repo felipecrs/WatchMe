@@ -7,12 +7,23 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
+import static com.readme.app.model.entity.Email.ADDRESS;
 import static com.readme.app.model.entity.Email.TABLE;
+import static com.readme.app.model.entity.Email.USER_ID;
 
-@Entity(tableName = TABLE)
+@Entity(tableName = TABLE,
+        foreignKeys = {
+                @ForeignKey(entity = User.class,
+                        parentColumns = User.ID,
+                        childColumns = USER_ID,
+                        onDelete = CASCADE)},
+        indices = {
+            @Index(value = USER_ID),
+            @Index(value = ADDRESS, unique = true)})
 public class Email {
     public static final String TABLE = "email";
 
@@ -24,15 +35,10 @@ public class Email {
     @ColumnInfo(name = ADDRESS)
     private String address;
 
-    @ForeignKey(entity = User.class, parentColumns = User.ID, childColumns = USER_ID, onDelete = CASCADE)
     @NonNull
     @ColumnInfo(name = USER_ID)
     private Integer userId;
 
-    public Email() {
-    }
-
-    @Ignore
     public Email(@NonNull String address, @NonNull Integer userId) {
         this.address = address;
         this.userId = userId;

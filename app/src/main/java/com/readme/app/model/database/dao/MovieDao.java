@@ -41,7 +41,14 @@ public abstract class MovieDao {
     public void delete(Movie movie, Integer userId) {
         UserHasMovie userHasMovie = new UserHasMovie(userId, movie.getId());
         deleteUserHasMovie(userHasMovie);
+        // No more users has this movie, should remove movie as well
+        if(countUsersAssociatedWithMovie(movie.getId()) <= 0) {
+            deleteMovie(movie);
+        }
     }
+
+    @Query("SELECT COUNT(*) FROM "+UserHasMovie.TABLE+" WHERE "+UserHasMovie.MOVIE_ID+" = :movieId")
+    public abstract int countUsersAssociatedWithMovie(Integer movieId);
 
     @Query("SELECT * FROM "+Movie.TABLE+" WHERE "+Movie.ID+" = :id")
     public abstract Movie getById(Integer id);

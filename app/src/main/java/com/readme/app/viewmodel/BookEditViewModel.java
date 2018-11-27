@@ -13,9 +13,9 @@ public class BookEditViewModel extends AndroidViewModel {
 
     private BookDao bookDao;
 
-    private Book newBook;
+    private Book newItem;
 
-    private Book originalBook;
+    private Book oldItem;
 
     private boolean editing;
 
@@ -31,34 +31,35 @@ public class BookEditViewModel extends AndroidViewModel {
         if(!initialized) {
             editing = id != -1;
 
-            if(editing) {
-                originalBook = bookDao.getById(id);
-            } else {
+            newItem = new Book();
 
+            if(editing) {
+                oldItem = bookDao.getById(id);
+                newItem.setId(oldItem.getId());
             }
-            newBook = new Book();
+
             initialized = true;
         }
     }
 
     public void save() {
 
-        bookDao.save(newBook);
+        bookDao.save(newItem);
     }
 
     public void delete() {
-        bookDao.delete(newBook);
+        bookDao.delete(oldItem);
     }
 
     public boolean isEditing() {
         return editing;
     }
 
-    public Book getNewBook() {
-        return newBook;
+    public Book getNewItem() {
+        return newItem;
     }
 
-    public Book getOriginalBook() {
-        return originalBook;
+    public Book getOldItem() {
+        return oldItem;
     }
 }

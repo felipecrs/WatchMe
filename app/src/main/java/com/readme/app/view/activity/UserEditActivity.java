@@ -184,6 +184,10 @@ public class UserEditActivity extends AppCompatActivity {
     }
 
     private void save(){
+        if (emailSpinner.getCount() < 1) {
+            Message.show(this, getString(R.string.message_email_required));
+            return;
+        }
         String name = nameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         String email = emailSpinner.getSelectedItem().toString();
