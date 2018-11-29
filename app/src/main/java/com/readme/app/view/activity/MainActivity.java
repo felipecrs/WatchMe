@@ -1,7 +1,5 @@
 package com.readme.app.view.activity;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,10 +17,8 @@ import com.readme.app.viewmodel.MainViewModel;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
@@ -74,7 +70,7 @@ public class MainActivity extends AppCompatActivity
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         viewModel.getCurrentUser().observe(this, user -> {
-            emailTextView.setText(user.getEmailAddress());
+            emailTextView.setText(user.getEmail());
             nameTextView.setText(user.getName());
         });
 

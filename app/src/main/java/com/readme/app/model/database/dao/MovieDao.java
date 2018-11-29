@@ -41,8 +41,8 @@ public abstract class MovieDao {
     public void delete(Movie movie, Integer userId) {
         UserHasMovie userHasMovie = new UserHasMovie(userId, movie.getId());
         deleteUserHasMovie(userHasMovie);
-        // No more users has this movie, should remove movie as well
         if(countUsersAssociatedWithMovie(movie.getId()) <= 0) {
+            // No more users has this movie, should remove the movie itself as well
             deleteMovie(movie);
         }
     }

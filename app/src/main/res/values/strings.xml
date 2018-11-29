@@ -68,7 +68,7 @@
     <string name="book_id_extra_key" translatable="false">book_id</string>
 
     <string name="title_activity_user_list">Users list</string>
-    <string name="sample_email">emailAddress@domain.com</string>
+    <string name="sample_email">email@domain.com</string>
     <string name="sample_bookTitle">Sample Title Book</string>
     <string name="sample_bookAuthor">" Sample Author Name"</string>
     <string name="title_activity_user_add">User register</string>

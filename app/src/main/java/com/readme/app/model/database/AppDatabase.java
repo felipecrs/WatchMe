@@ -11,7 +11,6 @@ import com.readme.app.model.database.dao.MovieDao;
 import com.readme.app.model.database.dao.SeriesDao;
 import com.readme.app.model.database.dao.UserDao;
 import com.readme.app.model.entity.Book;
-import com.readme.app.model.entity.Email;
 import com.readme.app.model.entity.Movie;
 import com.readme.app.model.entity.Series;
 import com.readme.app.model.entity.User;
@@ -27,7 +26,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {User.class, Email.class, Book.class, Movie.class, UserHasMovie.class, Series.class}, version = AppDatabase.VERSION, exportSchema = false)
+@Database(entities = {User.class, Book.class, Movie.class, UserHasMovie.class, Series.class}, version = AppDatabase.VERSION, exportSchema = false)
 @TypeConverters(Converter.class)
 public abstract class AppDatabase extends RoomDatabase {
 

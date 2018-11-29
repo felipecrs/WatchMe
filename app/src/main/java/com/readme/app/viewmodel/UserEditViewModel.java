@@ -3,11 +3,8 @@ package com.readme.app.viewmodel;
 import android.app.Application;
 
 import com.readme.app.model.database.AppDatabase;
-import com.readme.app.model.database.dao.SeriesDao;
 import com.readme.app.model.database.dao.UserDao;
-import com.readme.app.model.entity.Series;
 import com.readme.app.model.entity.User;
-import com.readme.app.model.entity.UserWithEmails;
 import com.readme.app.view.activity.SessionManager;
 
 import androidx.annotation.NonNull;
@@ -18,8 +15,8 @@ public class UserEditViewModel extends AndroidViewModel {
     private SessionManager sessionManager;
 
     private UserDao dao;
-    private UserWithEmails newItem;
-    private UserWithEmails oldItem;
+    private User newItem;
+    private User oldItem;
 
     private boolean editing;
 
@@ -35,11 +32,11 @@ public class UserEditViewModel extends AndroidViewModel {
         if(!initialized) {
             editing = id != -1;
 
-            newItem = new UserWithEmails();
+            newItem = new User();
 
             if(editing) {
-                oldItem = dao.getUserWithEmailsById(id);
-                newItem.getUser().setId(oldItem.getUser().getId());
+                oldItem = dao.getById(id);
+                newItem.setId(oldItem.getId());
             }
 
             initialized = true;
@@ -47,22 +44,22 @@ public class UserEditViewModel extends AndroidViewModel {
     }
 
     public void save() {
-        dao.saveUserWithEmails(newItem);
+        dao.save(newItem);
     }
 
     public void delete() {
-        dao.delete(oldItem.getUser());
+        dao.delete(oldItem);
     }
 
     public boolean isEditing() {
         return editing;
     }
 
-    public UserWithEmails getNewItem() {
+    public User getNewItem() {
         return newItem;
     }
 
-    public UserWithEmails getOldItem() {
+    public User getOldItem() {
         return oldItem;
     }
 }

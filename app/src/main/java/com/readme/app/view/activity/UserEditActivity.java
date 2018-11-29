@@ -12,36 +12,27 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
-import com.google.android.material.textfield.TextInputLayout;
 import com.readme.app.R;
-import com.readme.app.model.entity.Email;
 import com.readme.app.model.entity.User;
 import com.readme.app.model.database.AppDatabase;
 import com.readme.app.model.database.dao.UserDao;
 import com.readme.app.model.util.Message;
 import com.readme.app.model.util.Validator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 
 public class UserEditActivity extends AppCompatActivity {
 
     private EditText nameEditText;
+    private EditText emailEditText;
     private EditText passwordEditText;
-    private Spinner emailSpinner;
 
     private SessionManager sessionManager;
     private UserDao userDao;
 
     private User userToEdit;
-    private MutableLiveData<List<String>> emailAdressesToEdit = new MediatorLiveData<>();
     private boolean editing;
 
     @Override
@@ -58,10 +49,8 @@ public class UserEditActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         nameEditText = findViewById(R.id.user_edit_name);
+        emailEditText = findViewById(R.id.user_edit_email);
         passwordEditText = findViewById(R.id.user_edit_password);
-
-        ImageButton addEmailImageButton = findViewById(R.id.imageview_add_email);
-        ImageButton removeEmailImageButton = findViewById(R.id.imageview_remove_email);
 
         // Receiving data from parent activity
         Integer userIdToEdit = getIntent().getIntExtra(getString(R.string.intent_extra_user_id), -1);
@@ -70,82 +59,18 @@ public class UserEditActivity extends AppCompatActivity {
 
         editing = userIdToEdit != -1;
 
-        ArrayAdapter<String> emailAdressesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        emailAdressesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        emailSpinner = findViewById(R.id.user_spinner_email);
-        emailSpinner.setAdapter(emailAdressesAdapter);
-
-        addEmailImageButton.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("New email");
-
-            EditText emailAdressEditText = new EditText(this);
-            emailAdressEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-
-            builder.setView(emailAdressEditText);
-
-            builder.setPositiveButton("Add", (dialog, which) -> {
-
-            });
-            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v1 -> {
-                String emailAddress = emailAdressEditText.getText().toString();
-                if (Validator.isEmailValid(emailAddress)) {
-                    Email emailFound = userDao.getEmailByAddress(emailAddress);
-                    if ((emailFound == null || emailFound.getUserId().equals(userToEdit.getId())) && !emailAdressesToEdit.getValue().contains(emailAddress)) {
-                        addToEmailsToEdit(emailAddress);
-                        dialog.dismiss();
-                    } else {
-                        emailAdressEditText.setError(getString(R.string.error_email_already_exist));
-                    }
-                } else {
-                    emailAdressEditText.setError(getString(R.string.error_email_invalid));
-                    emailAdressEditText.requestFocus();
-                }
-            });
-        });
-        removeEmailImageButton.setOnClickListener(v -> {
-            removeFromEmailsToEdit((String)emailSpinner.getSelectedItem());
-        });
-
         // Editing
         if (editing) {
             userToEdit = userDao.getById(userIdToEdit);
-            List<String> emailAddresses = userDao.getEmailAdressesByUserId(userToEdit.getId());
-            // Setting the primary email as the first on list
-            for (String emailAddress : emailAddresses) {
-                if(emailAddress.equals(userToEdit.getEmailAddress())) {
-                    emailAddresses.remove(emailAddress);
-                    emailAddresses.add(0, emailAddress);
-                    break;
-                }
-            }
-            emailAdressesToEdit.setValue(emailAddresses);
         }
         // Adding
         else {
             userToEdit = new User();
-            userToEdit.setEmailAddress(emailAdressFromIntent);
+            userToEdit.setEmail(emailAdressFromIntent);
             userToEdit.setPassword(passwordFromIntent);
-
-            emailAdressesToEdit.setValue(new ArrayList<>());
-            if(Validator.isEmailValid(emailAdressFromIntent)) {
-                addToEmailsToEdit(emailAdressFromIntent);
-            }
 
             actionBar.setTitle(R.string.title_activity_user_add);
         }
-
-        emailAdressesToEdit.observe( this, emails -> {
-            emailAdressesAdapter.clear();
-            removeEmailImageButton.setEnabled(emails.size() > 1);
-            emailAdressesAdapter.addAll(emails);
-        });
 
         nameEditText.setText(userToEdit.getName());
         passwordEditText.setText(userToEdit.getPassword());
@@ -177,20 +102,10 @@ public class UserEditActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        setResult(RESULT_CANCELED);
-        super.onBackPressed();
-    }
-
     private void save(){
-        if (emailSpinner.getCount() < 1) {
-            Message.show(this, getString(R.string.message_email_required));
-            return;
-        }
         String name = nameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
-        String email = emailSpinner.getSelectedItem().toString();
+        String email = emailEditText.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -207,16 +122,16 @@ public class UserEditActivity extends AppCompatActivity {
 
         User emailFound = userDao.getByEmail(email);
         if (emailFound != null && !userToEdit.getId().equals(emailFound.getId())) {
-            Message.show(this, getString(R.string.error_email_already_exist));
+            emailEditText.setError(getString(R.string.error_email_already_exist));
+            focusView = emailEditText;
             cancel = true;
-        } else if (TextUtils.isEmpty(email)){
-            Message.show(this, getString(R.string.error_field_required));
+        } else if (email.isEmpty()){
+            emailEditText.setError(getString(R.string.error_field_required));
+            focusView = emailEditText;
             cancel = true;
-        }
-
-        if (!name.isEmpty() && !Validator.isNameValid(name)) {
-            nameEditText.setError(getString(R.string.error_invalid_name));
-            focusView = nameEditText;
+        } else if (!Validator.isEmailValid(email)) {
+            emailEditText.setError(getString(R.string.error_email_invalid));
+            focusView = emailEditText;
             cancel = true;
         }
 
@@ -245,10 +160,10 @@ public class UserEditActivity extends AppCompatActivity {
 
     private void save (String name, String emailAdress, String password) {
         userToEdit.setName(name);
-        userToEdit.setEmailAddress(emailAdress);
+        userToEdit.setEmail(emailAdress);
         userToEdit.setPassword(password);
 
-        userDao.saveUserWithEmails(userToEdit, emailAdressesToEdit.getValue());
+        userDao.save(userToEdit);
         // Editing
         if (editing) {
             Message.show(this, getString(R.string.message_user_updated));
@@ -269,16 +184,6 @@ public class UserEditActivity extends AppCompatActivity {
                     Message.show(this, getString(R.string.message_user_deleted));
                     sessionManager.logout(this);
                 }, null).show();
-    }
-
-    private void addToEmailsToEdit(String emailAdress) {
-        emailAdressesToEdit.getValue().add(emailAdress);
-        emailAdressesToEdit.setValue(emailAdressesToEdit.getValue());
-    }
-
-    private void removeFromEmailsToEdit(String emailAdress) {
-        emailAdressesToEdit.getValue().remove(emailAdress);
-        emailAdressesToEdit.setValue(emailAdressesToEdit.getValue());
     }
 
 }
